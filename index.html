@@ -3,69 +3,250 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F3F6FC">
+<meta name="theme-color" content="#F2F5F3">
 <meta name="color-scheme" content="light dark">
 <title>词神的脑瓜 · 知识星图</title>
-<script>try{document.documentElement.dataset.theme=localStorage.getItem('kb-visual-theme')||'porcelain'}catch(e){}</script>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('kb-visual-theme')==='night'?'night':'porcelain'}catch(e){}</script>
 <style>@font-face{font-family:"Brain Display";font-style:normal;font-weight:700;font-display:swap;src:url("data:font/ttf;base64,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") format("truetype");}
-:root{--page:#F3F6FC;--surface:#FFFFFF;--soft-surface:#EAF0F9;--ink:#1D2F50;--muted:#516585;--line:#CED8E9;--accent:#163C87;--accent-ink:#FFFFFF;--selected:#DAE6FC;--stage:#163C87;--stage-deep:#102A64;--stage-edge:#6986BF;--stage-line:#AAC0E4;--orb-light:#FFFFFF;--orb-middle:#EAF0FA;--orb-dark:#A8BDD8;--ink-rgb:29,47,80;--border-focus:#285CAA;--reading:#FBFCFF;--c-teal:#6FB4BC;--c-teal-2:#A9CDCB;--c-cream:#FFF0DE;--c-frost:#E4ECE7;--c-reflection:#547475}
-html[data-theme="night"]{--page:#152647;--surface:#1F3559;--soft-surface:#253C62;--ink:#EFF4FE;--muted:#B9CBE5;--line:#435D83;--accent:#A8C4F4;--accent-ink:#142644;--selected:#354E77;--stage:#2C4C7D;--stage-deep:#203A61;--stage-edge:#7899C6;--stage-line:#B8CCE9;--orb-light:#FFFFFF;--orb-middle:#DCE7F8;--orb-dark:#8AA7CF;--ink-rgb:239,244,254;--border-focus:#B6D0FB;--reading:#1C3050}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-[hidden]{display:none !important}
-html,body{margin:0;min-height:100%;width:100%}
-html{background:var(--page);color:var(--ink);color-scheme:light}
-html[data-theme="night"]{color-scheme:dark}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink);background:var(--page);-webkit-font-smoothing:antialiased}
-::selection{background:var(--selected);color:var(--ink)}
-button,a,input,select{font:inherit}
-button{cursor:pointer}
-button:disabled{cursor:wait}
-button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid var(--border-focus);outline-offset:5px}
-.entry{position:relative;min-height:100dvh;max-width:1540px;margin:auto;overflow:hidden;padding:0 56px;isolation:isolate}
-.home-header{height:105px;display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink);font-weight:600;font-size:14px;letter-spacing:.04em}
-.brand svg{width:30px;height:30px;flex:none}
-.theme-switch{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;background:transparent;color:var(--muted);border:1px solid var(--line);border-radius:100px;font-size:12px;min-height:40px}
-.theme-switch svg{width:17px;height:17px}
-.theme-switch:hover{background:var(--soft-surface);color:var(--ink)}
-.home-layout{min-height:calc(100dvh - 173px);display:grid;grid-template-columns:minmax(250px,.78fr) minmax(500px,1.3fr);align-items:center;gap:36px;padding:22px 0 28px}
-.home-copy{position:relative;z-index:2;padding:16px 0}
-.home-copy h1{font-family:"Brain Display",sans-serif;font-size:clamp(60px,6.5vw,96px);font-weight:700;line-height:1.13;letter-spacing:-.035em;margin:0 0 25px;color:var(--ink)}
-.title-period{color:var(--accent);font-family:inherit}
-.home-description{font-size:22px;letter-spacing:.045em;margin:0 0 21px;line-height:1.7;font-weight:500}
-.home-instruction{font-size:14px;line-height:1.85;color:var(--muted);margin:0;max-width:290px}
-.resume-study{display:flex;align-items:center;gap:12px;padding:11px 0;background:transparent;color:var(--ink);border:0;border-bottom:1px solid var(--line);margin-top:24px;text-align:left;font-size:12px}
-.resume-study strong{font-weight:600}.resume-study svg{width:18px;height:18px}
-.orbital-stage{position:relative;min-width:0;width:100%;height:min(630px,calc(100dvh - 225px));min-height:410px;border-radius:43% 43% 43% 16%;isolation:isolate}
-.stage-field{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;border-radius:inherit;background:radial-gradient(ellipse at 24% 10%,rgba(147,179,220,.18),transparent 59%),linear-gradient(145deg,var(--stage),var(--stage-deep));box-shadow:18px 28px 52px -31px rgba(16,40,90,.28)}
-.field-disc{position:absolute;width:76%;height:76%;left:12%;top:8%;border:1px solid rgba(204,223,248,.16);border-radius:50%;background:radial-gradient(ellipse at 33% 20%,rgba(204,223,248,.14),rgba(204,223,248,0) 65%);transform:rotate(-27deg) scaleY(.73)}
-.field-ring{position:absolute;left:-22%;top:22%;width:145%;height:60%;border:1px solid rgba(215,232,255,.25);border-radius:50%;transform:rotate(-32deg);box-shadow:inset 0 1px 0 rgba(210,229,255,.04)}
-.ring-two{left:-8%;top:23%;width:110%;height:48%;transform:rotate(39deg);border-color:rgba(180,207,244,.12)}
-.field-shadow{position:absolute;left:25%;bottom:6%;width:50%;height:5%;background:rgba(8,27,64,.31);filter:blur(17px);border-radius:50%}
-.constellation{position:absolute;left:50%;top:48%;width:min(calc(100% - 36px),520px);aspect-ratio:1;transform:translate(-50%,-50%);--ball-size:85px;--core-size:105px;--subject-font:21px;--core-font:12px}
-.vectors{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1;pointer-events:none}
-.vector{fill:none;stroke:var(--stage-line);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
-.node{position:absolute;left:calc(50% + var(--x,0px));top:calc(50% + var(--y,0px));width:var(--ball-size);height:var(--ball-size);transform:translate(-50%,-50%);z-index:2}
-.node.core{width:var(--core-size);height:var(--core-size);z-index:3}
-.subject.node{appearance:none;background:transparent;border:0;padding:0;border-radius:50%;touch-action:manipulation;color:var(--ink)}
-.subject.node:focus-visible{outline:2px solid #E1ECFF;outline-offset:7px}
-.sphere{display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;width:100%;height:100%;border-radius:50%;isolation:isolate;color:#1D3B66;background:radial-gradient(ellipse at 29% 23%,var(--orb-light) 0%,var(--orb-middle) 45%,var(--orb-dark) 100%);box-shadow:inset 0 2px 3px rgba(255,255,255,.85),inset -2px -4px 9px rgba(74,113,168,.25),6px 16px 18px -12px rgba(7,27,61,.68),13px 24px 32px -15px rgba(7,27,61,.28);transition:box-shadow .28s,translate .28s}
-.sphere::before{content:"";position:absolute;inset:2px;border-radius:inherit;border-top:1px solid rgba(255,255,255,.86);border-left:1px solid rgba(255,255,255,.59);border-bottom:1px solid rgba(166,193,228,.58);pointer-events:none}
-.sphere::after{content:"";position:absolute;left:20%;top:12%;width:52%;height:20%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.64),transparent 76%);filter:blur(3px);pointer-events:none}
-.subject .label{font-family:"Brain Display",sans-serif;font-weight:700;font-size:var(--subject-font);letter-spacing:.075em;color:#234470;position:relative;z-index:1}
-.subject:hover .sphere,.subject:focus-visible .sphere{translate:0 -5px;box-shadow:inset 0 2px 3px rgba(255,255,255,.95),inset -2px -4px 9px rgba(74,113,168,.22),8px 20px 25px -10px rgba(7,27,61,.58)}
-.subject:active .sphere{translate:0 0;scale:.96}
-.core .sphere{background:radial-gradient(ellipse at 23% 18%,#4F72AA 0%,#284F8C 47%,#102E66 100%);box-shadow:inset 0 1px 2px rgba(174,204,247,.55),inset -3px -8px 13px rgba(6,25,58,.40),6px 15px 25px -9px rgba(5,20,53,.55);color:#DBE7FF}
-.core-mark{display:block;width:43%;height:43%;color:#E7F0FE;margin-bottom:6px}.core-mark svg{width:100%;height:100%}.core-label{font-size:var(--core-font);font-weight:500;letter-spacing:.04em;color:#DDE9FF}
-.replay-home{position:absolute;bottom:18px;right:24px;display:flex;align-items:center;gap:7px;padding:7px 9px;background:transparent;border:0;color:#D4E1F8;font-size:10px}.replay-home svg{width:15px;height:15px}
-.home-footer{display:flex;justify-content:space-between;gap:12px;align-items:center;min-height:68px;color:var(--muted);border-top:1px solid var(--line);font-size:11px;letter-spacing:.035em;line-height:1.7}.home-footer p{margin:0}.home-footer p span{opacity:.45;margin:0 7px}.footer-detail{white-space:nowrap}
-@media(max-width:1000px){.entry{padding:0 30px}.home-layout{gap:18px;grid-template-columns:minmax(220px,.8fr) minmax(380px,1.1fr)}.home-copy h1{font-size:70px}.orbital-stage{height:535px;min-height:450px}}
-@media(max-width:700px){.entry{padding:0 22px}.home-header{height:76px}.brand{font-size:12px}.brand svg{width:25px;height:25px}.theme-switch{font-size:11px;padding:7px 10px;min-height:35px}.home-layout{display:flex;flex-direction:column;gap:18px;min-height:0;padding:24px 0 22px;align-items:stretch}.home-copy{display:grid;grid-template-columns:1fr auto;column-gap:14px;padding:0;align-items:end}.home-copy h1{font-size:clamp(47px,13.5vw,69px);line-height:1.11;margin:0;grid-row:1/3}.home-description{font-size:14px;margin:0 0 8px;text-align:right;white-space:nowrap}.home-instruction{font-size:11px;line-height:1.7;text-align:right;max-width:145px}.desktop-break{display:none}.resume-study{grid-column:1/-1;justify-content:flex-start;margin-top:12px;padding:7px 0;width:max-content;font-size:11px}.orbital-stage{height:auto;min-height:0;aspect-ratio:1/1.06;max-width:480px;margin:0 auto;border-radius:43% 43% 43% 14%}.constellation{top:47%;width:calc(100% - 32px)}.replay-home{bottom:12px;right:15px}.home-footer{font-size:10px;min-height:56px}.footer-detail{display:none}.home-footer p span{margin:0 3px}.core-label{letter-spacing:0}.field-shadow{bottom:5%}}
-@media(max-width:360px){.entry{padding:0 15px}.home-instruction{font-size:10px;max-width:130px}.home-layout{gap:17px}.home-copy h1{font-size:45px}.home-description{font-size:12px}.constellation{width:calc(100% - 28px)}}
-@media(prefers-reduced-motion:reduce){.sphere{transition:none}}
-@media(prefers-reduced-transparency:reduce){.theme-switch{background:var(--surface)}}
-.resource-entry{display:inline-flex;align-items:center;gap:7px;background:transparent;border:0;color:var(--muted);font-size:11px;padding:7px 0}.resource-entry svg{width:16px;height:16px}.resource-entry:hover{color:var(--ink)}
-@media(max-width:700px){.resource-entry{font-size:10px}.resource-entry svg{width:14px;height:14px}}
+:root {
+  --page: #F2F5F3; --surface: #FFFFFF; --soft-surface: #E4EEEA;
+  --ink: #213B43; --muted: #526A70; --line: #C7D7D3;
+  --accent: #226B73; --accent-ink: #FFFFFF; --selected: #D6EAE6;
+  --stage: #DCECE8; --stage-deep: #CCE2DF; --stage-edge: #709B9D;
+  --stage-line: #74989A; --border-focus: #A54F31; --reading: #FBFDFB;
+  --orb-light: #FFFFFF; --orb-middle: #DBEEEA; --orb-dark: #92BCB7;
+  --ink-rgb: 33,59,67; --accent-warm: #A54F31; --warm-surface: #F5E6D4;
+  --c-teal: #6FB4BC; --c-teal-2: #A9CDCB; --c-cream: #FFF0DE;
+  --c-frost: #E4ECE7; --c-reflection: #547475;
+}
+html[data-theme="night"] {
+  --page: #17282D; --surface: #203A40; --soft-surface: #29474D;
+  --ink: #EEF4EF; --muted: #B5C9C5; --line: #466368;
+  --accent: #A9D2C8; --accent-ink: #163338; --selected: #355D63;
+  --stage: #26464B; --stage-deep: #1B353B; --stage-edge: #8BB4B2;
+  --stage-line: #80ABA9; --border-focus: #F0B078; --reading: #20363C;
+  --orb-light: #F8FBF7; --orb-middle: #CCE3DC; --orb-dark: #87B1AD;
+  --ink-rgb: 238,244,239; --accent-warm: #EBA37F; --warm-surface: #433E35;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+html, body { width: 100%; min-height: 100%; margin: 0; }
+html { background: var(--page); color: var(--ink); color-scheme: light; scroll-padding-top: 88px; }
+html[data-theme="night"] { color-scheme: dark; }
+body { font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; background: var(--page); color: var(--ink); -webkit-font-smoothing: antialiased; letter-spacing: 0; }
+::selection { background: var(--selected); color: var(--ink); }
+button, a, input, select { font: inherit; letter-spacing: 0; }
+button { cursor: pointer; touch-action: manipulation; }
+button:disabled, select:disabled { cursor: wait; opacity: .6; }
+a { text-underline-offset: 5px; }
+input { caret-color: var(--accent); }
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 4px; }
+.entry { max-width: 1320px; min-height: 100dvh; margin: auto; padding: 0 48px; }
+.skip-link { position: fixed; left: 18px; top: -80px; z-index: 100; background: var(--surface); color: var(--ink); padding: 14px; }
+.skip-link:focus { top: 12px; }
+.home-header { position: sticky; top: 0; z-index: 8; min-height: 76px; display: flex; justify-content: space-between; align-items: center; gap: 16px; background: var(--page); border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 650; font-size: 14px; min-height: 44px; }
+.brand svg { width: 28px; height: 28px; flex: none; }
+.home-nav { display: flex; align-items: center; gap: 24px; }
+.home-nav > a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; color: var(--muted); text-decoration: none; }
+.home-nav > a:hover { color: var(--accent); }
+.icon { width: 18px; height: 18px; flex: none; stroke-width: 1.7; }
+.resource-entry, .theme-switch, .replay-home { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; background: transparent; color: var(--ink); border: 0; padding: 8px 0; font-size: 13px; }
+.theme-switch { padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; }
+.theme-switch:hover, .resource-entry:hover { color: var(--accent); }
+.theme-switch > span:first-child, .theme-switch > span:nth-child(2) { line-height: 0; }
+.theme-sun { display: none; }
+html[data-theme="night"] .theme-sun { display: inline-block; }
+html[data-theme="night"] .theme-moon { display: none; }
+.hero-home { padding: 28px 0 18px; }
+.hero-copy { display: grid; grid-template-columns: 1fr auto; gap: 14px 30px; align-items: center; position: relative; z-index: 2; }
+.hero-copy h1 { font: 700 48px/1.2 "Brain Display",sans-serif; letter-spacing: 0; margin: 0 0 9px; }
+.hero-lede { font-size: 15px; line-height: 1.6; margin: 0; color: var(--muted); }
+.hero-lede em { font-style: normal; color: var(--accent); }
+.hero-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; justify-content: flex-end; }
+.hero-link, .resume-study, .lesson-link { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 8px 0; color: var(--accent); background: transparent; border: 0; border-bottom: 1px solid var(--accent); font-size: 13px; text-decoration: none; }
+.resume-study { color: var(--ink); }
+.resume-study strong { font-weight: 600; }
+.home-scope { display: flex; flex-wrap: wrap; gap: 8px 20px; grid-column: 1/-1; font-size: 12px; line-height: 1.6; color: var(--muted); margin: 0; font-variant-numeric: tabular-nums; }
+.orbital-stage { position: relative; width: 100%; height: 380px; min-width: 0; isolation: isolate; }
+.stage-field { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.field-ring { position: absolute; width: min(680px,90%); height: 270px; top: 56px; left: 50%; margin-left: max(-340px,-45%); border: 1px solid var(--line); border-radius: 50%; background: transparent; transform: rotate(-15deg); animation: orbit-drift 20s ease-in-out infinite alternate; }
+.ring-two { width: min(640px,88%); height: 300px; margin-left: max(-320px,-44%); top: 39px; transform: rotate(17deg); animation-name: orbit-counter; animation-delay: -6s; }
+.ring-three { width: min(800px,96%); height: 120px; margin-left: max(-400px,-48%); top: 136px; border-color: var(--stage-line); opacity: .5; transform: rotate(-4deg); animation-name: orbit-level; }
+.stage-caption { position: absolute; left: 0; top: 32px; display: flex; flex-direction: column; gap: 8px; font-size: 12px; line-height: 1.7; color: var(--muted); }
+.stage-caption span:last-child { color: var(--accent); font-size: 13px; }
+.constellation { position: absolute; left: 50%; top: 50%; width: min(540px,100%); aspect-ratio: 1; transform: translate(-50%,-50%); --ball-size: 82px; --core-size: 105px; --subject-font: 21px; --core-font: 12px; }
+.vectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; pointer-events: none; }
+.vector { fill: none; stroke: var(--stage-line); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.vector-flow { stroke-dasharray: 3 9; animation: connection-flow 12s linear infinite; }
+.node { position: absolute; left: calc(50% + var(--x,0px)); top: calc(50% + var(--y,0px)); width: var(--ball-size); height: var(--ball-size); transform: translate(-50%,-50%); z-index: 2; }
+.node.core { width: var(--core-size); height: var(--core-size); z-index: 3; }
+.subject.node { background: transparent; border: 0; padding: 0; border-radius: 50%; color: var(--ink); }
+.sphere { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 50%; color: #254C54; background: radial-gradient(ellipse at 28% 22%,var(--orb-light),var(--orb-middle) 48%,var(--orb-dark)); box-shadow: inset 0 2px 3px #FFFFFFB3,inset -2px -4px 9px #497C803D,6px 16px 23px -13px #1B515C66; transition: transform .24s,box-shadow .24s; }
+.subject .sphere { animation: subject-float 8s ease-in-out infinite; animation-delay: calc(var(--order,0) * -1.3s); }
+.subject:hover .sphere, .subject:focus-visible .sphere { transform: scale(1.06); }
+.subject:active .sphere { transform: scale(.97); }
+.subject .label { font: 700 var(--subject-font)/1.3 "Brain Display",sans-serif; letter-spacing: 0; }
+.subject[data-subject="语文"] .sphere, .subject[data-subject="英语"] .sphere { background: radial-gradient(ellipse at 28% 22%,#FFFFFF,#F2EBDD 50%,#CDBDA7); }
+.subject[data-subject="化学"] .sphere { background: radial-gradient(ellipse at 28% 22%,#FFFFFF,#E8EBF4 50%,#A9B7D0); }
+.subject[data-subject="生物"] .sphere { background: radial-gradient(ellipse at 28% 22%,#FFFFFF,#E6EEDC 50%,#B0C39A); }
+.core .sphere { color: #F6FCF5; background: radial-gradient(ellipse at 23% 18%,#76B8B6,#3B7F89 48%,#225565); box-shadow: inset 0 1px 2px #D0EDE880,inset -3px -6px 11px #163F5159,6px 16px 24px -13px #17495780; }
+.core-mark { width: 43%; height: 43%; margin-bottom: 5px; }
+.core-mark svg { width: 100%; height: 100%; }
+.core-label { font-size: var(--core-font); line-height: 1.5; }
+.replay-home { position: absolute; right: 0; bottom: 24px; width: 44px; padding: 0; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); }
+.replay-home:hover { background: var(--soft-surface); color: var(--ink); }
+.section-heading { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px 24px; margin-bottom: 24px; }
+.section-heading h2, .closing-band h2 { font: 700 28px/1.4 "Brain Display",sans-serif; letter-spacing: 0; margin: 0; }
+.section-heading > a { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; color: var(--accent); font-size: 12px; text-decoration: none; }
+.section-heading > span { font-size: 12px; color: var(--muted); }
+.subject-strip { border-top: 1px solid var(--line); padding: 30px 0 42px; }
+.subject-rail { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); border-top: 1px solid var(--line); }
+.subject-rail button { display: grid; grid-template-columns: 1fr auto; gap: 6px 8px; padding: 20px 16px; background: transparent; color: var(--ink); border: 0; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: left; min-width: 0; }
+.subject-rail button:first-child { padding-left: 0; }
+.subject-rail button:last-child { border-right: 0; }
+.subject-rail strong { font-size: 17px; font-weight: 600; }
+.subject-rail small { grid-column: 1/-1; font-size: 11px; line-height: 1.7; color: var(--muted); }
+.subject-rail .icon { color: var(--accent); }
+.subject-rail button:hover { background: var(--soft-surface); }
+.lab-section { border-top: 1px solid var(--line); padding: 36px 0 52px; }
+.lab-layout { display: grid; grid-template-columns: minmax(220px,.7fr) minmax(0,1.3fr); gap: 48px; align-items: start; }
+.lab-intro { padding-top: 4px; }
+.model-picker { display: grid; gap: 10px; font-size: 12px; line-height: 1.7; color: var(--muted); max-width: 360px; }
+.model-picker select { width: 100%; min-width: 0; min-height: 46px; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); }
+.lab-intro h3 { font: 700 32px/1.4 "Brain Display",sans-serif; letter-spacing: 0; margin: 34px 0 12px; overflow-wrap: anywhere; }
+.lab-question { font-size: 16px; line-height: 1.8; max-width: 28ch; margin: 0 0 26px; color: var(--muted); }
+.lesson-link { color: var(--accent); }
+.lab-topic { font-size: 12px; line-height: 1.8; color: var(--muted); margin: 18px 0 0; }
+.lab-model-host { min-width: 0; min-height: 590px; }
+.lab-section .knowledge-visual.lab-model { color-scheme: light; width: 100%; margin: 0; padding: 20px; background: #F7FAF6; border: 1px solid #C7D7D3; border-radius: 8px; }
+.lab-model .visual-canvas { border-radius: 4px; }
+.lab-model .visual-heading h3 { font-size: 17px; }
+.lab-model .visual-controls { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 20px; }
+.lab-model .visual-control { color: #4C6D68; }
+.lab-model .visual-control input[type="range"] { min-height: 44px; }
+.lab-model .visual-control select { min-height: 44px; border-radius: 4px; }
+.lab-model .visual-reset { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 10px; background: #F7FAF6; color: #365E62; border: 1px solid #A2BAB3; border-radius: 4px; font-size: 12px; }
+.lab-model .visual-kind, .lab-model .visual-note { color: #506963; }
+.lab-model .visual-explanation { color: #526F69; }
+.lab-model .visual-observation { color: #365E62; }
+.lab-model .visual-note { clear: both; padding-top: 12px; }
+.lab-model .visual-observation, .lab-model .visual-explanation { min-height: 2.1em; }
+.lab-status { font-size: 14px; line-height: 1.8; color: var(--accent-warm); margin: 20px 0 0; }
+.closing-band { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 36px 0; border-top: 1px solid var(--line); }
+.closing-band p { font-size: 14px; line-height: 1.8; color: var(--muted); margin: 10px 0 0; }
+.closing-band .resource-entry { min-height: 46px; color: var(--accent); border-bottom: 1px solid var(--accent); }
+.home-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 74px; padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid var(--line); font-size: 11px; line-height: 1.7; color: var(--muted); }
+.home-footer p { margin: 0; }
+.subject-strip, .lab-section, .closing-band { scroll-margin-top: 88px; }
+.home-motion-paused .field-ring, .home-motion-paused .vector-flow, .home-motion-paused .subject .sphere { animation-play-state: paused; }
+@keyframes subject-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+@keyframes orbit-drift { from { transform: rotate(-15deg) scaleY(.92); } to { transform: rotate(-10deg) scaleY(1.04); } }
+@keyframes orbit-counter { from { transform: rotate(17deg); } to { transform: rotate(11deg); } }
+@keyframes orbit-level { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+@keyframes connection-flow { to { stroke-dashoffset: -120; } }
+@media (max-width: 1000px) {
+  .entry { padding: 0 32px; }
+  .home-nav { gap: 18px; }
+  .hero-copy h1 { font-size: 42px; }
+  .subject-rail { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .subject-rail button:nth-child(3n) { border-right: 0; }
+  .subject-rail button:nth-child(4) { padding-left: 0; }
+  .lab-layout { grid-template-columns: minmax(190px,.7fr) minmax(0,1.3fr); gap: 28px; }
+  .lab-intro h3 { font-size: 28px; }
+  .stage-caption { font-size: 11px; }
+}
+@media (max-width: 700px) {
+  html { scroll-padding-top: 78px; }
+  .entry { padding: 0 20px; }
+  .home-header { min-height: 64px; gap: 10px; }
+  .brand { font-size: 12px; gap: 7px; }
+  .brand svg { width: 25px; height: 25px; }
+  .home-nav { gap: 12px; }
+  .home-nav > a { font-size: 11px; }
+  .resource-entry { font-size: 12px; gap: 6px; }
+  .theme-switch { padding: 8px; min-width: 44px; }
+  .home-nav .theme-switch [data-theme-label] { display: none; }
+  .home-nav .resource-entry .icon { display: none; }
+  .hero-home { padding: 24px 0 12px; }
+  .hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+  .hero-copy h1 { font-size: 34px; margin-bottom: 6px; }
+  .hero-lede { font-size: 13px; }
+  .hero-actions { justify-content: flex-start; gap: 20px; order: 3; }
+  .hero-link, .resume-study { font-size: 12px; }
+  .home-scope { font-size: 11px; gap: 8px 14px; }
+  .orbital-stage { height: 340px; }
+  .stage-caption { display: none; }
+  .constellation { width: min(450px,100%); }
+  .field-ring { height: 230px; top: 55px; }
+  .ring-two { height: 280px; top: 30px; }
+  .ring-three { height: 95px; top: 120px; }
+  .replay-home { bottom: 4px; }
+  .section-heading { margin-bottom: 18px; gap: 10px; }
+  .section-heading h2, .closing-band h2 { font-size: 24px; }
+  .subject-strip { padding: 24px 0 32px; }
+  .subject-rail { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .subject-rail button { padding: 17px 12px; }
+  .subject-rail button:nth-child(3n) { border-right: 1px solid var(--line); }
+  .subject-rail button:nth-child(2n) { border-right: 0; }
+  .subject-rail button:nth-child(odd) { padding-left: 0; }
+  .subject-rail button:nth-child(4) { padding-left: 12px; }
+  .subject-rail strong { font-size: 16px; }
+  .subject-rail small { font-size: 11px; }
+  .lab-section { padding: 30px 0 36px; }
+  .lab-layout { display: flex; flex-direction: column; gap: 24px; }
+  .lab-intro { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; width: 100%; padding-top: 0; }
+  .model-picker { grid-column: 1/-1; max-width: none; }
+  .lab-intro h3 { font-size: 26px; margin: 22px 0 8px; grid-column: 1/-1; }
+  .lab-question { font-size: 14px; margin: 0; grid-column: 1/-1; max-width: none; }
+  .lesson-link { grid-column: 2; grid-row: 4; margin-top: 12px; font-size: 12px; }
+  .lab-topic { grid-column: 1; grid-row: 4; align-self: center; margin-top: 12px; font-size: 11px; }
+  .lab-model-host { width: 100%; min-height: 590px; }
+  .lab-section .knowledge-visual.lab-model { padding: 14px; }
+  .lab-model .visual-controls { grid-template-columns: 1fr; gap: 10px; }
+  .lab-model .visual-heading { flex-wrap: wrap; }
+  .lab-model .visual-heading h3 { font-size: 15px; }
+  .lab-model svg { min-width: 0; }
+  .closing-band { flex-direction: column; align-items: flex-start; gap: 18px; padding: 30px 0; }
+  .closing-band p { font-size: 13px; }
+  .home-footer { min-height: 66px; font-size: 10px; }
+}
+@media (max-width: 360px) {
+  .entry { padding: 0 16px; }
+  .home-nav { gap: 9px; }
+  .home-nav > a { font-size: 10px; }
+  .home-nav .resource-entry { font-size: 11px; }
+  .brand { font-size: 11px; }
+  .hero-copy h1 { font-size: 31px; }
+  .orbital-stage { height: 305px; }
+  .home-scope { gap: 8px 11px; font-size: 10px; }
+  .section-heading h2 { font-size: 22px; }
+  .lab-model .visual-heading { flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .field-ring, .vector-flow, .subject .sphere { animation: none; }
+  .sphere { transition: none; }
+}
+
+/* Local instructional canvas and browser surfaces. */
+html { scrollbar-color: var(--stage-edge) var(--page); }
+.lab-section .lab-model svg.icon { width: 18px; height: 18px; min-width: 18px; }
+.lab-section .lab-model .visual-controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.lab-section .lab-model .visual-reset { min-height: 44px; padding: 8px 10px; font-size: 12px; }
+.lab-section .lab-model .visual-heading h3 { font-size: 17px; }
+.lab-section .lab-model .visual-kind { color: #506963; }
+.lab-section .lab-model .visual-canvas { border-radius: 4px; }
+.lab-section .lab-model .visual-observation strong { color: #2F565B; }
+.lab-section .lab-model .visual-correction { margin: 16px 0 0; padding: 10px 12px; border: 1px solid #C6A590; border-radius: 4px; background: #F5EDE0; color: #805C4B; font-size: 12px; line-height: 1.9; }
+@media (max-width:700px) {
+  .lab-section .lab-model .visual-controls { grid-template-columns: 1fr; }
+  .lab-section .lab-model .visual-heading { flex-wrap: wrap; }
+  .lab-section .lab-model .visual-heading h3 { font-size: 15px; }
+  .lab-section .lab-model svg { min-width: 0; }
+}
+@media (max-width:360px) {
+  .lab-section .lab-model .visual-heading { flex-direction: column; align-items: flex-start; }
+}
 
 @font-face{font-family:"Brain Hand";font-style:normal;font-weight:400;font-display:swap;src:url("data:font/ttf;base64,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") format("truetype");}
 /* Subject story and bottom-up skill canvas */
@@ -367,6 +548,24 @@ html[data-theme="night"] .resource-screen{background:var(--page)}
 @media(max-width:360px){.resource-filters{grid-template-columns:1fr}.resource-search{grid-column:auto}.resource-tags{gap:5px}.resource-tags button{padding:6px 9px}}.resource-questions{margin-top:13px;border-top:1px solid var(--line);padding-top:10px}.resource-questions summary{cursor:pointer;color:var(--accent);font-size:11px}.question-mini-list{display:grid;gap:5px;margin-top:9px}.question-mini{display:grid;grid-template-columns:54px 42px 48px 1fr;gap:6px;align-items:baseline;border-bottom:1px solid var(--line);padding:6px 0;font-size:10px;line-height:1.5;color:var(--muted)}.question-mini b{color:var(--ink)}.question-mini span{white-space:nowrap}.question-mini em{font-style:normal;color:#397058;white-space:nowrap}@media(max-width:760px){.question-mini{grid-template-columns:52px 40px 44px 1fr;font-size:10px}}
 
 </style>
+<!-- Embedded Lucide 0.468.0 ISC license:
+ISC License
+
+Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors 2022.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+-->
 <!-- Embedded Noto Sans SC font license:
 Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'
 
@@ -562,60 +761,502 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 -->
 </head>
 <body>
+<a class="skip-link" href="#subjects">跳到学科入口</a>
 <main class="entry" aria-label="词神的脑瓜">
   <header class="home-header">
-    <a class="brand" href="#" aria-label="词神的脑瓜首页"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="4" fill="currentColor"/><ellipse cx="16" cy="16" rx="14" ry="6" transform="rotate(-28 16 16)" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="27.6" cy="9.5" r="2.4" fill="currentColor"/></svg><span>词神的脑瓜</span></a>
-    <button class="theme-switch" data-theme-switch type="button" aria-label="切换夜航主题"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 14.2A8.5 8.5 0 0 1 9.8 4a8.5 8.5 0 1 0 10.2 10.2Z"/></svg><span>夜航</span></button>
+    <a class="brand" href="#" aria-label="词神的脑瓜首页"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="4" fill="currentColor"/><ellipse cx="16" cy="16" rx="14" ry="6" transform="rotate(-28 16 16)" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="27.6" cy="9.5" r="2.4" fill="currentColor"/></svg><span>知识星图</span></a>
+    <nav class="home-nav" aria-label="首页导航">
+      <a href="#lab">模型实验室</a>
+      <button class="resource-entry" id="open-resources" type="button"><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-book-open"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 7v14" />
+  <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+</svg>
+<span>资源馆</span></button>
+      <button class="theme-switch" data-theme-switch type="button" aria-label="切换夜航主题" title="切换夜航主题"><span class="theme-moon"><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-moon"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+</svg>
+</span><span class="theme-sun"><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-sun"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <circle cx="12" cy="12" r="4" />
+  <path d="M12 2v2" />
+  <path d="M12 20v2" />
+  <path d="m4.93 4.93 1.41 1.41" />
+  <path d="m17.66 17.66 1.41 1.41" />
+  <path d="M2 12h2" />
+  <path d="M20 12h2" />
+  <path d="m6.34 17.66-1.41 1.41" />
+  <path d="m19.07 4.93-1.41 1.41" />
+</svg>
+</span><span data-theme-label>夜航</span></button>
+    </nav>
   </header>
-  <div class="home-layout">
-    <section class="home-copy" aria-labelledby="home-title">
-      <h1 id="home-title">词神的<br>脑瓜<span class="title-period">。</span></h1>
-      <p class="home-description">把知识连起来。</p>
-      <p class="home-instruction">选一颗学科星球，<br class="desktop-break">从基础出发，向上探索。</p>
-      <button class="resume-study" id="resume-study" hidden type="button"><span>继续上次</span><strong></strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></button>
-    </section>
-    <section class="orbital-stage" aria-label="六科学科入口">
-      <div class="stage-field" aria-hidden="true"><div class="field-disc"></div><div class="field-ring ring-one"></div><div class="field-ring ring-two"></div><div class="field-shadow"></div></div>
+  <section class="hero-home" aria-labelledby="home-title">
+    <div class="hero-copy">
+      <div><h1 id="home-title">词神的脑瓜</h1><p class="hero-lede">知识星图 · <em>把知识连起来。</em></p></div>
+      <div class="hero-actions">
+        <button class="resume-study" id="resume-study" hidden type="button"><span>继续上次</span><strong></strong><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+        <a class="hero-link" href="#lab">探索交互模型 <!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-down"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 5v14" />
+  <path d="m19 12-7 7-7-7" />
+</svg>
+</a>
+      </div>
+      <p class="home-scope"><span>69 个章节</span><span>505 个知识点</span><span>14 个教学模型</span></p>
+    </div>
+    <div class="orbital-stage" aria-label="六科学科入口">
+      <div class="stage-field" aria-hidden="true"><div class="field-ring ring-one"></div><div class="field-ring ring-two"></div><div class="field-ring ring-three"></div></div>
+      <div class="stage-caption" aria-live="off"><span>六科学科入口</span><span id="stage-subject">数学 · 16 章</span></div>
       <div class="constellation" id="constellation">
         <svg class="vectors" id="vectors" aria-hidden="true"></svg>
-        <div class="node core"><div class="sphere"><span class="core-mark"><svg viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="7" fill="currentColor"/><ellipse cx="27" cy="27" rx="23" ry="9" transform="rotate(-30 27 27)" fill="none" stroke="currentColor" stroke-width="1.2"/><ellipse cx="27" cy="27" rx="23" ry="9" transform="rotate(30 27 27)" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></span><span class="label core-label">词神的脑瓜</span></div></div>
-        <button type="button" class="node subject" data-angle="-90" data-subject="语文" aria-label="进入语文知识体系"><div class="sphere"><span class="label">语文</span></div></button>
+        <div class="node core"><div class="sphere"><span class="core-mark"><svg viewBox="0 0 54 54" aria-hidden="true"><circle cx="27" cy="27" r="7" fill="currentColor"/><ellipse cx="27" cy="27" rx="23" ry="9" transform="rotate(-30 27 27)" fill="none" stroke="currentColor" stroke-width="1.2"/><ellipse cx="27" cy="27" rx="23" ry="9" transform="rotate(30 27 27)" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></span><span class="core-label">知识星图</span></div></div>
+        <button type="button" class="node subject" data-angle="-90" data-subject="语文" aria-label="进入语文知识体系，资料待补"><div class="sphere"><span class="label">语文</span></div></button>
         <button type="button" class="node subject" data-angle="-30" data-subject="数学" aria-label="进入数学知识体系"><div class="sphere"><span class="label">数学</span></div></button>
-        <button type="button" class="node subject" data-angle="30" data-subject="英语" aria-label="进入英语知识体系"><div class="sphere"><span class="label">英语</span></div></button>
+        <button type="button" class="node subject" data-angle="30" data-subject="英语" aria-label="进入英语知识体系，资料待补"><div class="sphere"><span class="label">英语</span></div></button>
         <button type="button" class="node subject" data-angle="90" data-subject="物理" aria-label="进入物理知识体系"><div class="sphere"><span class="label">物理</span></div></button>
         <button type="button" class="node subject" data-angle="150" data-subject="化学" aria-label="进入化学知识体系"><div class="sphere"><span class="label">化学</span></div></button>
         <button type="button" class="node subject" data-angle="210" data-subject="生物" aria-label="进入生物知识体系"><div class="sphere"><span class="label">生物</span></div></button>
       </div>
-      <button class="replay-home" id="replay-home" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 10a8 8 0 1 1 .8 7M4 4v6h6"/></svg><span>重播展开</span></button>
-    </section>
-  </div>
-  <footer class="home-footer"><p>69 个章节 <span>／</span> 505 个知识点 <span>／</span> 可交互图解</p><button class="resource-entry" id="open-resources" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v13H4zM7 8.5h10M7 12h6M7 15.5h8"/></svg><span>资源馆</span></button><span class="footer-detail">知识星图</span></footer>
+      <button class="replay-home" id="replay-home" type="button" aria-label="重播知识场动画" title="重播知识场动画"><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-rotate-ccw"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+  <path d="M3 3v5h5" />
+</svg>
+</button>
+    </div>
+  </section>
+  <section class="subject-strip" id="subjects" tabindex="-1" aria-labelledby="subjects-title">
+    <div class="section-heading"><h2 id="subjects-title">学科路径</h2><a href="#lab">模型实验室 <!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-down"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 5v14" />
+  <path d="m19 12-7 7-7-7" />
+</svg>
+</a></div>
+    <div class="subject-rail">
+      <button type="button" data-subject-jump="数学"><strong>数学</strong><small>16 章 · 112 知识点</small><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+      <button type="button" data-subject-jump="物理"><strong>物理</strong><small>19 章 · 145 知识点</small><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+      <button type="button" data-subject-jump="化学"><strong>化学</strong><small>13 章 · 123 知识点</small><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+      <button type="button" data-subject-jump="生物"><strong>生物</strong><small>21 章 · 125 知识点</small><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+      <button type="button" data-subject-jump="语文"><strong>语文</strong><small>资料待补</small><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+      <button type="button" data-subject-jump="英语"><strong>英语</strong><small>资料待补</small><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+    </div>
+  </section>
+  <section class="lab-section" id="lab" aria-labelledby="lab-title">
+    <div class="section-heading"><h2 id="lab-title">模型实验室</h2><span>14 个教学模型</span></div>
+    <div class="lab-layout">
+      <div class="lab-intro">
+        <label class="model-picker" for="lab-model-select">选择模型<select id="lab-model-select" aria-controls="lab-model-host" disabled><option value="vectorAdd">向量加法</option></select></label>
+        <h3 id="lab-model-title">向量加法</h3>
+        <p class="lab-question" id="lab-question">方向改变了，合向量会怎样？</p>
+        <button class="lesson-link" id="lab-open-point" type="button" disabled>进入知识点 <!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+        <p class="lab-topic" id="lab-topic">数学 · 平面向量</p>
+      </div>
+      <div class="lab-model-host" id="lab-model-host"><div class="knowledge-visual lab-model" data-visual-point="M-10-01" data-visual-model="vectorAdd" aria-label="向量加法交互模型"></div></div>
+    </div>
+    <p class="lab-status" id="lab-status" role="status" hidden></p>
+    <noscript><p>交互模型需要 JavaScript。</p></noscript>
+  </section>
+  <section class="closing-band" aria-labelledby="resources-home-title">
+    <div><h2 id="resources-home-title">资源馆</h2><p>本地试卷、专题卷、题组与单题集。</p></div>
+    <button class="resource-entry" id="open-resources-bottom" type="button"><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-book-open"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 7v14" />
+  <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
+</svg>
+<span>打开资源馆</span><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-arrow-right"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 12h14" />
+  <path d="m12 5 7 7-7 7" />
+</svg>
+</button>
+  </section>
+  <footer class="home-footer"><p>词神的脑瓜 · 知识星图</p><span>语文、英语资料待补</span></footer>
 </main>
+<template id="home-reset-icon"><!-- @license lucide-static v0.468.0 - ISC -->
+<svg aria-hidden="true" focusable="false" class="icon lucide lucide-rotate-ccw"
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+  <path d="M3 3v5h5" />
+</svg>
+</template>
 <script>(() => {
-'use strict';
-const scene=document.getElementById('constellation'),svg=document.getElementById('vectors'),subjects=[...scene.querySelectorAll('.subject')],ns='http://www.w3.org/2000/svg';
-const reduce=matchMedia('(prefers-reduced-motion: reduce)');let last=0;
-function node(tag,attrs){const e=document.createElementNS(ns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));return e;}
-function layout(animate=false){
- const width=scene.clientWidth;if(!width)return;last=width;const d=Math.min(91,width*.195),core=d*1.28,r=Math.min(width/2-d/2-14,scene.parentElement.clientHeight*.47-d/2-22);
- scene.style.setProperty('--ball-size',d+'px');scene.style.setProperty('--core-size',core+'px');scene.style.setProperty('--subject-font',Math.max(16,Math.min(23,d*.275))+'px');scene.style.setProperty('--core-font',Math.max(9,Math.min(13,core*.12))+'px');
- svg.setAttribute('viewBox',`0 0 ${width} ${width}`);svg.replaceChildren();
- const coreEl=scene.querySelector('.core .sphere');coreEl.getAnimations().forEach(a=>a.cancel());
- if(animate&&!reduce.matches)coreEl.animate([{opacity:0,transform:'scale(.1) translateY(22px)'},{opacity:1,transform:'scale(1.08) translateY(-5px)',offset:.7},{opacity:1,transform:'none'}],{duration:750,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});
- subjects.forEach((s,i)=>{const angle=Number(s.dataset.angle),a=angle*Math.PI/180;s.style.setProperty('--x',Math.cos(a)*r+'px');s.style.setProperty('--y',Math.sin(a)*r+'px');
- const g=node('g',{transform:`translate(${width/2} ${width/2}) rotate(${angle})`}),length=r-d/2-6,line=node('line',{class:'vector',x1:core/2+4,y1:0,x2:length,y2:0}),head=node('path',{class:'vector',d:`M ${length-6} -3 L ${length} 0 L ${length-6} 3`});g.append(line,head);svg.append(g);
- const sphere=s.querySelector('.sphere');sphere.getAnimations().forEach(a=>a.cancel());
- if(animate&&!reduce.matches){g.animate([{opacity:0},{opacity:1}],{duration:570,delay:620+i*55,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});sphere.animate([{opacity:0,transform:'scale(.12)'},{opacity:1,transform:'scale(1.08)',offset:.75},{opacity:1,transform:'none'}],{duration:580,delay:1030+i*55,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'});}
- });
-}
-layout(true);new ResizeObserver(()=>{if(Math.abs(scene.clientWidth-last)>1)layout(false);}).observe(scene);window.addEventListener('resize',()=>layout(false));
-document.getElementById('replay-home').addEventListener('click',()=>layout(true));
-function applyTheme(t){document.documentElement.dataset.theme=t==='night'?'night':'porcelain';try{localStorage.setItem('kb-visual-theme',document.documentElement.dataset.theme)}catch(e){}document.querySelector('meta[name=theme-color]').content=t==='night'?'#152647':'#F3F6FC';document.querySelectorAll('[data-theme-switch]').forEach(b=>{b.querySelector('span').textContent=t==='night'?'瓷白':'夜航';b.setAttribute('aria-label',t==='night'?'切换瓷白主题':'切换夜航主题')});}
-// Delegated theme controls cover the map toolbar inserted after this script.
-document.addEventListener('click',e=>{if(e.target.closest('[data-theme-switch]'))applyTheme(document.documentElement.dataset.theme==='night'?'porcelain':'night')});
-applyTheme(document.documentElement.dataset.theme);
-window.KBHome={layout,applyTheme};
-})();</script>
+  'use strict';
+  const scene = document.getElementById('constellation');
+  if (!scene) return;
+  const svg = document.getElementById('vectors');
+  const stage = scene.closest('.orbital-stage');
+  const subjects = [...scene.querySelectorAll('.subject')];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const ns = 'http://www.w3.org/2000/svg';
+  let lastWidth = 0, lastHeight = 0, stageVisible = true;
+  function node(tag, attrs) {
+    const element = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, String(value)));
+    return element;
+  }
+  function layout(animate = false) {
+    const width = scene.clientWidth, height = stage.clientHeight;
+    if (!width || !height) return;
+    lastWidth = width; lastHeight = height;
+    const diameter = Math.min(86, Math.max(58, width * .19)), core = diameter * 1.22;
+    const radius = Math.max(0, Math.min(width / 2 - diameter / 2 - 10, height / 2 - diameter / 2 - 12));
+    scene.style.setProperty('--ball-size', diameter + 'px');
+    scene.style.setProperty('--core-size', core + 'px');
+    scene.style.setProperty('--subject-font', Math.max(16, Math.min(23, diameter * .27)) + 'px');
+    scene.style.setProperty('--core-font', Math.max(10, Math.min(13, core * .12)) + 'px');
+    svg.setAttribute('viewBox', `0 0 ${width} ${width}`);
+    svg.replaceChildren();
+    subjects.forEach((subject, index) => {
+      const angle = Number(subject.dataset.angle), radians = angle * Math.PI / 180;
+      subject.style.setProperty('--x', Math.cos(radians) * radius + 'px');
+      subject.style.setProperty('--y', Math.sin(radians) * radius + 'px');
+      subject.style.setProperty('--order', index);
+      const group = node('g', { transform: `translate(${width / 2} ${width / 2}) rotate(${angle})` });
+      const start = core / 2 + 6, end = Math.max(start, radius - diameter / 2 - 5);
+      group.append(node('line', { class: 'vector vector-flow', x1: start, y1: 0, x2: end, y2: 0 }), node('path', { class: 'vector', d: `M ${end - 5} -3 L ${end} 0 L ${end - 5} 3` }));
+      svg.append(group);
+      const sphere = subject.querySelector('.sphere');
+      sphere.getAnimations().filter(animation => !('animationName' in animation)).forEach(animation => animation.cancel());
+      if (animate && !reduce.matches) sphere.animate([{ transform: 'scale(.72)' }, { transform: 'scale(1.04)', offset: .72 }, { transform: 'none' }], { duration: 650, delay: index * 55, easing: 'cubic-bezier(.16,1,.3,1)' });
+    });
+  }
+  function applyTheme(theme) {
+    const next = theme === 'night' ? 'night' : 'porcelain';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('kb-visual-theme', next); } catch (error) {}
+    document.querySelector('meta[name="theme-color"]').content = next === 'night' ? '#17282D' : '#F2F5F3';
+    document.querySelectorAll('[data-theme-switch]').forEach(button => {
+      const label = next === 'night' ? '切换瓷白主题' : '切换夜航主题';
+      const text = button.querySelector('[data-theme-label]') || button.querySelector('span');
+      if (text) text.textContent = next === 'night' ? '瓷白' : '夜航';
+      button.setAttribute('aria-label', label); button.title = label;
+      button.setAttribute('aria-pressed', String(next === 'night'));
+    });
+  }
+  function syncMotion() {
+    document.body.classList.toggle('home-motion-paused', reduce.matches || document.hidden || !stageVisible || document.body.classList.contains('view-tree') || document.body.classList.contains('resource-mode'));
+  }
+  function updateSubject(subject) {
+    if (!subject) return;
+    const data = window.KBTree?.counts[subject.dataset.subject];
+    document.getElementById('stage-subject').textContent = subject.dataset.subject + (data?.chapters ? ` · ${data.chapters} 章` : ' · 资料待补');
+  }
+  const models = [
+    { key: 'vectorAdd', title: '向量加法', point: 'M-10-01', subject: '数学', topic: '平面向量', question: '方向改变了，合向量会怎样？' },
+    { key: 'dot', title: '向量数量积', point: 'M-10-03', subject: '数学', topic: '平面向量', question: '投影为什么可以是负的？' },
+    { key: 'unitCircle', title: '单位圆与三角函数', point: 'M-08-01', subject: '数学', topic: '三角函数', question: '圆上的点，怎样对应正弦曲线？' },
+    { key: 'tangent', title: '割线与切线', point: 'M-14-01', subject: '数学', topic: '导数', question: '两点越来越近，斜率会趋向哪里？' },
+    { key: 'velocity', title: '速度与位移', point: 'P-01-04', subject: '物理', topic: '运动学', question: '物体换向以后，路程和位移还相同吗？' },
+    { key: 'projectile', title: '平抛运动', point: 'P-04-04', subject: '物理', topic: '曲线运动', question: '同一时刻，水平和竖直运动分别发生了什么？' },
+    { key: 'electric', title: '电场力与电势能', point: 'P-09-02', subject: '物理', topic: '电场', question: '电荷移动时，电场力和电势能怎样改变？' },
+    { key: 'magnetic', title: '磁场中的带电粒子', point: 'P-11-04', subject: '物理', topic: '磁场', question: '哪些量决定粒子的运动半径？' },
+    { key: 'atom', title: '原子结构', point: 'C-06-02', subject: '化学', topic: '物质结构', question: '电子排布和原子序数怎样对应？' },
+    { key: 'catalyst', title: '催化剂与活化能', point: 'C-08-03', subject: '化学', topic: '反应速率', question: '催化剂改变路径，也改变反应热吗？' },
+    { key: 'cell', title: '原电池与电解池', point: 'C-10-01', subject: '化学', topic: '电化学', question: '电子从哪里出发，反应在哪个电极发生？' },
+    { key: 'photosynthesis', title: '光合作用', point: 'B-06-03', subject: '生物', topic: '细胞代谢', question: '光照或二氧化碳改变，物质如何短时变化？' },
+    { key: 'meiosis', title: '减数分裂', point: 'B-09-01', subject: '生物', topic: '细胞分裂', question: '染色体、染色单体和 DNA 数量怎样变化？' },
+    { key: 'dna', title: 'DNA 半保留复制', point: 'B-10-03', subject: '生物', topic: '遗传物质', question: '最初的两条母链，复制后去了哪里？' }
+  ];
+  let currentModel = models[0];
+  const cachedModels = new Map();
+  function selectModel(key) {
+    const model = models.find(item => item.key === key);
+    if (!model || !window.KBVisual?.models.includes(key)) return;
+    const host = document.getElementById('lab-model-host');
+    let section = cachedModels.get(key);
+    if (!section) {
+      section = document.createElement('div'); section.className = 'knowledge-visual lab-model';
+      section.dataset.visualModel = key; section.dataset.visualPoint = model.point;
+      section.setAttribute('aria-label', model.title + '交互模型');
+      window.KBVisual.mount(section);
+      const reset = section.querySelector('.visual-reset');
+      const icon = document.getElementById('home-reset-icon');
+      if (icon) reset?.prepend(icon.content.cloneNode(true));
+      cachedModels.set(key, section);
+    }
+    host.replaceChildren(section); currentModel = model;
+    document.getElementById('lab-model-select').value = key;
+    document.getElementById('lab-status').hidden = true;
+    document.getElementById('lab-model-title').textContent = model.title;
+    document.getElementById('lab-question').textContent = model.question;
+    document.getElementById('lab-topic').textContent = model.subject + ' · ' + model.topic;
+    document.getElementById('lab-open-point').setAttribute('aria-label', '进入' + model.title + '知识点');
+  }
+  function mountLab() {
+    const picker = document.getElementById('lab-model-select'), status = document.getElementById('lab-status');
+    if (!window.KBVisual || !window.KBTree) {
+      status.hidden = false; status.textContent = '模型加载失败，请刷新页面重试。';
+      document.getElementById('lab-model-host').replaceChildren(); return;
+    }
+    try {
+    picker.replaceChildren();
+    for (const subject of ['数学', '物理', '化学', '生物']) {
+      const group = document.createElement('optgroup'); group.label = subject;
+      models.filter(model => model.subject === subject && window.KBVisual.models.includes(model.key)).forEach(model => {
+        const option = document.createElement('option'); option.value = model.key; option.textContent = model.title; group.append(option);
+      });
+      picker.append(group);
+    }
+    selectModel('vectorAdd'); picker.disabled = false; document.getElementById('lab-open-point').disabled = false;
+    picker.addEventListener('change', () => {
+      try { selectModel(picker.value); }
+      catch (error) {
+        picker.value = currentModel.key;
+        status.hidden = false; status.textContent = '这个模型暂时无法加载，请换一个模型或刷新页面。';
+      }
+    });
+    document.getElementById('lab-open-point').addEventListener('click', () => document.dispatchEvent(new CustomEvent('kb:open-point', { detail: { id: currentModel.point } })));
+    document.querySelectorAll('[data-subject-jump]').forEach(button => {
+      const data = window.KBTree.counts[button.dataset.subjectJump];
+      button.querySelector('small').textContent = data?.chapters ? `${data.chapters} 章 · ${data.points} 知识点` : '资料待补';
+    });
+    updateSubject(subjects.find(subject => subject.dataset.subject === '数学'));
+    } catch (error) {
+      status.hidden = false; status.textContent = '模型加载失败，请刷新页面重试。';
+      picker.disabled = true; document.getElementById('lab-open-point').disabled = true;
+      document.getElementById('lab-model-host').replaceChildren();
+    }
+  }
+  layout(true); applyTheme(document.documentElement.dataset.theme);
+  if ('ResizeObserver' in window) new ResizeObserver(() => {
+    if (Math.abs(scene.clientWidth - lastWidth) > 1 || Math.abs(stage.clientHeight - lastHeight) > 1) layout(false);
+  }).observe(stage);
+  window.addEventListener('resize', () => layout(false));
+  document.getElementById('replay-home').addEventListener('click', () => layout(true));
+  subjects.forEach(subject => {
+    subject.addEventListener('mouseenter', () => updateSubject(subject));
+    subject.addEventListener('focus', () => updateSubject(subject));
+  });
+  document.addEventListener('click', event => {
+    if (event.target.closest('[data-theme-switch]')) applyTheme(document.documentElement.dataset.theme === 'night' ? 'porcelain' : 'night');
+    const jump = event.target.closest('[data-subject-jump]');
+    if (jump) subjects.find(subject => subject.dataset.subject === jump.dataset.subjectJump)?.click();
+  });
+  document.querySelector('.brand').addEventListener('click', event => {
+    event.preventDefault();
+    if (['#lab', '#subjects'].includes(location.hash)) history.replaceState({}, '', location.pathname + location.search);
+    window.scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+  });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => { stageVisible = entries[0].isIntersecting; syncMotion(); }, { threshold: 0 }).observe(stage);
+  }
+  new MutationObserver(syncMotion).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('visibilitychange', syncMotion); reduce.addEventListener('change', syncMotion); syncMotion();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mountLab, { once: true }); else mountLab();
+  window.KBHome = { layout, applyTheme };
+})();
+</script>
 <section class="resource-screen" id="resource-screen" hidden aria-label="卷册与专题资源馆">
   <header class="resource-header">
     <button class="canvas-action" id="resource-back" aria-label="返回首页" title="返回首页"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></button>
@@ -1415,8 +2056,15 @@ SOFTWARE.
       event.preventDefault();if(event.key==='ArrowLeft')state.tx+=50;if(event.key==='ArrowRight')state.tx-=50;if(event.key==='ArrowUp')state.ty+=50;if(event.key==='ArrowDown')state.ty-=50;requestPaint();
     }
   });
+  document.addEventListener('kb:open-point',event=>{
+    const id=event.detail?.id,p=DATA.points[id];
+    if(!p || state.busy)return;
+    if(state.chapter!==p.chapter)expandChapter(p.chapter);
+    openPoint(id);
+  });
   function restoreRoute(){
-    state.storyToken++;state.busy=false;story.hidden=true;
+    if(['#lab','#subjects','#resources'].includes(location.hash)){showHome(false);return;}
+    state.storyToken++;unlockStory();
     const [encoded,chapter]=location.hash.slice(1).split('/');let subject;try{subject=decodeURIComponent(encoded||'');}catch(e){subject='';}
     if(DATA.subjects[subject]){openSubject(subject,false);if(chapter&&DATA.chapters[chapter]&&DATA.subjects[subject].chapters.includes(chapter))expandChapter(chapter,false);}
     else showHome(false);
@@ -1447,13 +2095,13 @@ SOFTWARE.
   window.addEventListener('resize',()=>{if(!screen.hidden)requestPaint();});
   if(location.hash)restoreRoute();
   // Public read-only diagnostics; no credentials or private file paths are shipped.
-  window.KBTree={version:'porcelain-atlas-20261003',dataVersion:DATA.version,counts:Object.fromEntries(Object.entries(DATA.subjects).map(([s,d])=>[s,{chapters:d.chapters.length,points:d.pointCount}])),getState:()=>({subject:state.subject,chapter:state.chapter,nodeCount:state.nodes.length,edgeCount:state.edges.length,scale:state.scale,tx:state.tx,ty:state.ty,busy:state.busy,readerOpen:!reader.hidden}),audit:DATA.audit};
+  window.KBTree={version:'knowledge-atlas-20261003' ,dataVersion:DATA.version,counts:Object.fromEntries(Object.entries(DATA.subjects).map(([s,d])=>[s,{chapters:d.chapters.length,points:d.pointCount}])),getState:()=>({subject:state.subject,chapter:state.chapter,nodeCount:state.nodes.length,edgeCount:state.edges.length,scale:state.scale,tx:state.tx,ty:state.ty,busy:state.busy,readerOpen:!reader.hidden}),audit:DATA.audit};
 })();</script>
 <script>(() => {
   'use strict';
   const DATA=JSON.parse(document.getElementById('resource-data').textContent);
   const screen=document.getElementById('resource-screen'),list=document.getElementById('resource-list'),empty=document.getElementById('resource-empty'),count=document.getElementById('resource-count'),notice=document.getElementById('resource-notice'),query=document.getElementById('resource-query'),subject=document.getElementById('resource-subject'),year=document.getElementById('resource-year'),type=document.getElementById('resource-type'),tags=document.getElementById('resource-tags');
-  const escape=v=>String(v).replace(/[&<>"']/g,ch=>String.fromCharCode(38)+({'&':'amp;','<':'lt;','>':'gt;','"':'quot;',"'":'#39;'}[ch]));let quick='';
+  const escape=v=>String(v).replace(/[&<>"']/g,ch=>String.fromCharCode(38)+({'&':'amp;','<':'lt;','>':'gt;','"':'quot;',"'":'#39;'}[ch]));let quick='',opener=null;
   function matches(item){const q=query.value.trim().toLowerCase(),text=[item.title,item.description,item.coverage,item.status,item.answerStatus,item.kind,item.subject,item.year,...(item.tags||[]),...(item.relatedCodes||[])].join(' ').toLowerCase();return(!q||text.includes(q))&&(subject.value==='all'||item.subject===subject.value)&&(year.value==='all'||item.year===year.value)&&(type.value==='all'||item.kind===type.value)&&(!quick||text.includes(quick.toLowerCase()));}
   function render(){
     const items=DATA.items.filter(matches);
@@ -1475,11 +2123,27 @@ SOFTWARE.
     }).join('');
   }
 
-  function open(){screen.hidden=false;document.querySelector('.entry').inert=true;document.body.classList.add('resource-mode');render();query.focus({preventScroll:true});history.pushState({resource:true},'','#resources');}
-  function close(push=true){screen.hidden=true;document.querySelector('.entry').inert=false;document.body.classList.remove('resource-mode');if(push)history.pushState({},'',location.pathname+location.search);document.getElementById('open-resources')?.focus({preventScroll:true});}
+  function open(push=true){
+    if(!screen.hidden)return;
+    opener=document.activeElement;screen.hidden=false;document.querySelector('.entry').inert=true;
+    document.body.classList.add('resource-mode');render();query.focus({preventScroll:true});
+    if(push)history.pushState({resource:true},'','#resources');
+  }
+  function close(push=true){
+    if(screen.hidden)return;
+    screen.hidden=true;document.querySelector('.entry').inert=false;document.body.classList.remove('resource-mode');
+    if(push)history.pushState({},'',location.pathname+location.search);
+    const target=opener?.isConnected?opener:document.getElementById('open-resources');
+    if(!document.body.classList.contains('view-tree'))target?.focus({preventScroll:true});
+  }
   [query,subject,year,type].forEach(input=>['input','change'].forEach(name=>input.addEventListener(name,()=>{quick='';tags.querySelectorAll('button').forEach(b=>b.classList.remove('active'));render();})));
   tags.addEventListener('click',e=>{const b=e.target.closest('[data-quick]');if(!b)return;quick=quick===b.dataset.quick?'':b.dataset.quick;tags.querySelectorAll('button').forEach(x=>x.classList.toggle('active',x===b&&!!quick));render();});
-  document.getElementById('open-resources')?.addEventListener('click',open);document.getElementById('resource-back')?.addEventListener('click',()=>close());window.addEventListener('popstate',()=>{if(location.hash!=='#resources')close(false);});notice.textContent=DATA.notice;window.KBResource={open,close,render,count:DATA.items.length};
+  document.querySelectorAll('#open-resources,#open-resources-bottom').forEach(button=>button.addEventListener('click',()=>open()));
+  document.getElementById('resource-back')?.addEventListener('click',()=>close());
+  window.addEventListener('popstate',()=>{if(location.hash==='#resources')open(false);else close(false);});
+  document.addEventListener('keydown',event=>{if(!screen.hidden&&event.key==='Escape'){event.preventDefault();close();}});
+  if(location.hash==='#resources')open(false);
+  notice.textContent=DATA.notice;window.KBResource={open,close,render,count:DATA.items.length};
 })();</script>
 </body>
 </html>
