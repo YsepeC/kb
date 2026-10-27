@@ -21,16 +21,16 @@ body{
   font-family:"Plus Jakarta Sans","Manrope","Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
   background:linear-gradient(152deg,#E4C0A6 0%,#D4B8AC 42%,#EBD7CC 100%);
   background-attachment:fixed;
-  padding:18px 14px 128px;
+  padding:18px 14px 158px;
   font-feature-settings:"tnum" 1,"lnum" 1;
 }
-body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(50px);pointer-events:none;z-index:0}
+body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(50px);pointer-events:none;z-index:0;transform:translateZ(0)}
 body::before{width:420px;height:420px;left:-120px;top:-140px;background:radial-gradient(circle,#FFF6EC 0%,rgba(255,246,236,0) 70%)}
 body::after{width:380px;height:380px;right:-110px;top:120px;background:radial-gradient(circle,#CFE6E4 0%,rgba(207,230,228,0) 70%)}
 body.detail-open{overflow:hidden}
 main{position:relative;z-index:1;max-width:1060px;margin:0 auto}
-#home{transition:opacity .34s var(--ease),filter .34s var(--ease),transform .34s var(--ease)}
-body.detail-open #home{opacity:.3;filter:blur(3px);transform:scale(.985)}
+#home{transition:opacity .34s var(--ease)}
+body.detail-open #home{opacity:.34}
 #home [data-mod]{transition:opacity .28s var(--ease)}
 #home [data-mod].is-focus{opacity:0}
 
@@ -40,7 +40,7 @@ h1{margin:0;font-size:34px;letter-spacing:-.6px;font-weight:800}
 h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.2px}
 .topRight{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .card{
-  background:var(--card);backdrop-filter:blur(28px) saturate(140%);-webkit-backdrop-filter:blur(28px) saturate(140%);
+  background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border:1px solid var(--line);
   box-shadow:0 18px 40px -22px rgba(60,40,30,.45),inset 0 1px 0 rgba(255,255,255,.85);
   border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;
@@ -81,12 +81,12 @@ h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.2px}
 /* ===== KPI ===== */
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
 .kpi{
-  background:var(--card);backdrop-filter:blur(28px) saturate(140%);
+  background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border:1px solid var(--line);border-radius:20px;padding:14px 16px;
   box-shadow:0 14px 30px -22px rgba(60,40,30,.5),inset 0 1px 0 rgba(255,255,255,.8);
-  transition:transform .24s var(--ease),box-shadow .24s var(--ease);
+  transition:background .24s var(--ease),box-shadow .24s var(--ease);
 }
-#home .kpi:hover{transform:translateY(-2px);box-shadow:0 20px 36px -24px rgba(60,40,30,.6),inset 0 1px 0 rgba(255,255,255,.85)}
+#home .kpi:hover{background:rgba(255,255,255,.74);box-shadow:0 20px 36px -24px rgba(60,40,30,.6),inset 0 1px 0 rgba(255,255,255,.85)}
 .kpi .k{font-size:11.5px;color:var(--muted);letter-spacing:.3px}
 .kpi .v{font-size:26px;font-weight:800;letter-spacing:-1px;margin-top:6px;line-height:1.05;font-variant-numeric:tabular-nums}
 .kpi .v small{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0}
@@ -138,7 +138,8 @@ tbody tr:nth-child(odd){background:rgba(255,255,255,.34)}
 tbody tr:hover{background:rgba(255,255,255,.55)}
 td.nm{font-weight:600;text-align:left}
 td .weak{color:#A4512F;font-weight:700}
-.del{border:0;background:transparent;color:#9E7261;font-size:16px;cursor:pointer;padding:2px 6px;border-radius:8px}
+.del{border:0;background:transparent;color:#9E7261;font-size:15px;cursor:pointer;padding:0;border-radius:8px;width:28px;height:28px;display:inline-grid;place-items:center;vertical-align:middle}
+table th:last-child,table td:last-child{width:42px;text-align:center}
 .del:active{background:rgba(164,81,47,.12)}
 footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
 
@@ -150,7 +151,7 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
 .dock{
   position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);
   display:flex;align-items:flex-end;gap:6px;padding:8px 10px 7px;border-radius:22px;z-index:70;
-  background:rgba(255,255,255,.5);backdrop-filter:blur(28px) saturate(150%);-webkit-backdrop-filter:blur(28px) saturate(150%);
+  background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.46));
   border:1px solid rgba(255,255,255,.72);
   box-shadow:0 22px 50px -26px rgba(60,40,30,.55),inset 0 1px 0 rgba(255,255,255,.9);
 }
@@ -169,8 +170,9 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
   padding:4px 9px;border-radius:9px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.9);
   box-shadow:0 8px 20px -12px rgba(60,40,30,.6);opacity:0;pointer-events:none;
   transition:opacity .16s var(--ease),transform .16s var(--ease);
+  will-change:opacity;
 }
-.dockItem:hover .tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.dockItem:hover .tip{opacity:1;transform:translateX(-50%) translateY(0);transition-delay:.26s}
 .dockItem .dot{
   position:absolute;left:50%;bottom:4px;width:4.5px;height:4.5px;border-radius:50%;background:var(--copper);
   transform:translateX(-50%) scale(0);transition:transform .24s var(--ease);
@@ -191,12 +193,12 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
 .detailCard{
   position:fixed;display:flex;flex-direction:column;overflow:hidden;
   background:rgba(255,255,255,.62);
-  backdrop-filter:blur(30px) saturate(150%);-webkit-backdrop-filter:blur(30px) saturate(150%);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,.78);border-radius:26px;
   box-shadow:0 46px 100px -46px rgba(60,40,30,.62),inset 0 1px 0 rgba(255,255,255,.92);
   transition:left .5s var(--ease),top .5s var(--ease),width .5s var(--ease),height .5s var(--ease),opacity .3s linear,border-radius .5s var(--ease);
-  will-change:left,top,width,height;
 }
+.detail.open .detailCard{will-change:left,top,width,height}
 .detailCard .dcHead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px 10px;border-bottom:1px solid rgba(255,255,255,.6);flex:0 0 auto}
 .detailCard .dcTitle{font-size:15px;font-weight:800;letter-spacing:-.2px;display:flex;align-items:center;gap:8px}
 .detailCard .dcTitle em{font-style:normal;font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.2px}
@@ -206,7 +208,7 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
   display:grid;place-items:center;transition:.18s;flex:0 0 auto;
 }
 .detailCard .dcClose:hover{background:rgba(255,255,255,.9)}
-.detailCard .dcBody{padding:16px 22px 18px;overflow:auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.detailCard .dcBody{padding:14px 22px 16px;overflow:auto;flex:1 1 auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .detailCard .dcBody>*{animation:dcIn .42s var(--ease) both}
 @keyframes dcIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
@@ -214,7 +216,7 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
   position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));
   transform:translateX(-50%) translateY(16px) scale(.94);
   display:flex;gap:7px;padding:7px;border-radius:18px;z-index:68;
-  background:rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
+  background:rgba(255,255,255,.64);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border:1px solid rgba(255,255,255,.7);
   box-shadow:0 18px 40px -24px rgba(60,40,30,.5),inset 0 1px 0 rgba(255,255,255,.85);
   opacity:0;pointer-events:none;max-width:calc(100vw - 24px);overflow-x:auto;
@@ -273,6 +275,38 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
 .rowbtns .btn{flex:1;text-align:center;padding:12px}
 .empty{padding:26px 10px;text-align:center;color:var(--muted);font-size:13px;line-height:1.9}
 .empty button{margin-top:10px}
+/* ===== 位次增强 ===== */
+.pkbar{position:relative;height:5px;border-radius:99px;background:rgba(27,27,25,.10);margin-top:8px;overflow:hidden}
+.pkbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#E7A471,#B66D44);width:0;transition:width .6s var(--ease)}
+.kpi .per{color:#8E4F2B;font-weight:700}
+.rkCell{display:flex;flex-direction:column;align-items:flex-end;gap:1px;line-height:1.25}
+.rkCell .rkTop{display:flex;align-items:baseline;gap:2px;font-variant-numeric:tabular-nums}
+.rkCell .rkTop b{font-size:13px;font-weight:800;letter-spacing:-.2px}
+.rkCell .rkTop span{font-size:10px;color:var(--muted);font-weight:600}
+.rkSub{font-size:10px;font-weight:700;letter-spacing:.2px}
+.rkSub.hi{color:#8E4F2B}
+.rkSub.mid{color:#2F6C74}
+.rkSub.low{color:var(--muted)}
+.delta{display:inline-flex;align-items:center;font-size:10px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:0}
+.delta.up2{color:#3F7D5D}
+.delta.down2{color:#A4512F}
+.delta.nil{color:#A79E96;font-weight:600}
+th.sortable{cursor:pointer;user-select:none;position:relative;padding-right:15px}
+th.sortable:hover{color:var(--ink2)}
+th.sortable::after{content:"\2195";position:absolute;right:3px;top:0;font-size:9px;opacity:.3;font-weight:400}
+th.sortable[data-dir="1"]::after{content:"\2191";opacity:.95;color:#8E4F2B}
+th.sortable[data-dir="-1"]::after{content:"\2193";opacity:.95;color:#8E4F2B}
+.rkBig{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.72);border-radius:18px;padding:11px 16px;margin-bottom:12px}
+.rkBig.none{grid-template-columns:1fr}
+.rkBig .k{font-size:11px;color:var(--muted)}
+.rkBig .v{font-size:26px;font-weight:800;letter-spacing:-1.4px;margin-top:3px;line-height:1.05;font-variant-numeric:tabular-nums}
+.rkBig .v small{line-height:1;vertical-align:baseline;font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0;margin-left:3px}
+.rkBig .d{font-size:11px;color:var(--muted);margin-top:4px}
+.pkbarbig{height:7px;border-radius:99px;background:rgba(27,27,25,.10);overflow:hidden}
+.pkbarbig i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#E7A471,#B66D44)}
+.rkScale{display:flex;justify-content:space-between;font-size:9.5px;color:#A79E96;margin-top:4px;letter-spacing:.3px}
+@media (hover:none){.dockItem .tip{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;transition-duration:.01ms !important}}
 
 @media (max-width:760px){
   h1{font-size:28px}
@@ -280,6 +314,8 @@ footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
   .grid2{grid-template-columns:1fr}
   .subs{grid-template-columns:1fr 1fr}
   .kpi .v{font-size:23px}
+  .card,.kpi{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .detailCard{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   .statGrid{grid-template-columns:1fr 1fr}
   .filt.open{width:302px}
   .detailCard{border-radius:22px}
@@ -412,6 +448,25 @@ const KEY = 'tj_scores_v1';
 const FLT_KEY = 'tj_scores_flt';
 let store = { meta:{ target:620 }, exams:[] };
 let flt = 'all';
+let SORT = { key:'date', dir:-1 };
+function sortList(list){
+  const arr = list.slice(), d = SORT.dir, k = SORT.key;
+  const dv = e=> String(e.date || '');
+  const cmpDate = (a,b)=> dv(a).localeCompare(dv(b));
+  if(k === 'date') arr.sort((a,b)=> cmpDate(a,b) * d);
+  else if(k === 'name') arr.sort((a,b)=> String(a.name||'').localeCompare(String(b.name||''),'zh') * d || cmpDate(a,b));
+  else if(k === 'total') arr.sort((a,b)=> (total(a) - total(b)) * d || cmpDate(a,b));
+  else if(k === 'rank') arr.sort((a,b)=>{
+    const ra = Number(a.rank) > 0 ? Number(a.rank) : 999999;
+    const rb = Number(b.rank) > 0 ? Number(b.rank) : 999999;
+    return (ra - rb) * d || cmpDate(a,b);
+  });
+  else if(SUBJ.some(x=>x[0] === k)) arr.sort((a,b)=>{
+    const va = Number(a.soc && a.soc[k]) || 0, vb = Number(b.soc && b.soc[k]) || 0;
+    return (va - vb) * d || cmpDate(a,b);
+  });
+  return arr;
+}
 
 const $ = (s,r)=> (r||document).querySelector(s);
 const $$ = (s,r)=> Array.prototype.slice.call((r||document).querySelectorAll(s));
@@ -668,12 +723,23 @@ function drawSpark(svg, vals, full){
 }
 
 /* ================= KPI ================= */
+function rankInfo(v){
+  const arr = v.filter(ex=>Number(ex.rank) > 0);
+  if(!arr.length) return null;
+  const last = arr[arr.length - 1];
+  const r = Number(last.rank), c = Number(last.count);
+  const prev = arr.length > 1 ? Number(arr[arr.length - 2].rank) : null;
+  return { ex:last, rank:r, count: c > 0 ? c : null,
+    pct: c > 0 ? r / c * 100 : null,
+    delta: prev != null ? prev - r : null };
+}
 function updateKpis(){
   const host = $('#kpis');
   if(!host.dataset.built){
-    host.innerHTML = ['最近总分','目标差距','六科均分','最高分'].map((k,i)=>
+    host.innerHTML = ['最近总分','目标差距','六科均分','位次'].map((k,i)=>
       '<div class="kpi"><div class="k">' + k + '</div>'
       + '<div class="v"><span data-num>0</span><small data-u></small></div>'
+      + (i === 3 ? '<div class="pkbar" data-pk hidden><i data-pkb></i></div>' : '')
       + '<div class="d" data-d>—</div></div>'
     ).join('');
     host.dataset.built = '1';
@@ -701,10 +767,25 @@ function updateKpis(){
   $('[data-u]', cards[2]).textContent = ' 分/科';
   $('[data-d]', cards[2]).textContent = '近 ' + v.length + ' 次平均';
 
-  tween($('[data-num]', cards[3]), mx);
-  $('[data-u]', cards[3]).textContent = ' 分';
-  const best = nums.length ? v[nums.indexOf(mx)] : null;
-  $('[data-d]', cards[3]).textContent = best ? (best.name || '最好的一次') : '—';
+  const ri = rankInfo(v);
+  const pk = $('[data-pk]', cards[3]), bar = $('[data-pkb]', cards[3]);
+  if(ri){
+    tween($('[data-num]', cards[3]), ri.rank);
+    $('[data-u]', cards[3]).textContent = ri.count ? ' / ' + ri.count : '';
+    const dl = ri.delta, bits = [];
+    if(ri.pct != null) bits.push('<span class="per">前 ' + ri.pct.toFixed(1) + '%</span>');
+    if(dl != null && dl !== 0) bits.push('<span class="delta ' + (dl > 0 ? 'up2' : 'down2') + '">' + (dl > 0 ? '↑' + dl : '↓' + Math.abs(dl)) + '</span>');
+    else if(dl === 0) bits.push('<span class="delta nil">持平</span>');
+    $('[data-d]', cards[3]).innerHTML = bits.length ? bits.join(' ') : '只填了位次';
+    if(pk && bar && ri.pct != null){ pk.hidden = false; bar.style.width = Math.max(2.5, ri.pct).toFixed(1) + '%'; }
+    else if(pk) pk.hidden = true;
+  } else {
+    tween($('[data-num]', cards[3]), mx);
+    $('[data-u]', cards[3]).textContent = ' 分';
+    const best = nums.length ? v[nums.indexOf(mx)] : null;
+    $('[data-d]', cards[3]).textContent = best ? ('最高分 · ' + (best.name || '最好的一次')) : '最高分';
+    if(pk) pk.hidden = true;
+  }
 }
 
 /* ================= 总分趋势 ================= */
@@ -783,27 +864,60 @@ function updateTarget(){
 }
 
 /* ================= 表格 ================= */
+function rankDeltaMap(){
+  const arr = store.exams.slice().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+  const m = {};
+  let prev = null;
+  arr.forEach(ex=>{
+    const r = Number(ex.rank);
+    if(!(r > 0)) return;
+    if(prev != null && prev !== r) m[ex.id] = prev - r;
+    prev = r;
+  });
+  return m;
+}
+function rankCell(ex, deltas){
+  const r = Number(ex.rank), c = Number(ex.count);
+  if(!(r > 0)) return '<td><span class="rkSub low">—</span></td>';
+  const pct = c > 0 ? Math.round(r / c * 1000) / 10 : null;
+  const cls = pct == null ? 'low' : (pct <= 10 ? 'hi' : pct <= 35 ? 'mid' : 'low');
+  const dl = deltas[ex.id];
+  const dTxt = dl == null ? '' : (dl > 0 ? '↑' + dl : dl < 0 ? '↓' + Math.abs(dl) : '—');
+  const dCls = dl == null ? 'nil' : (dl > 0 ? 'up2' : dl < 0 ? 'down2' : 'nil');
+  return '<td><div class="rkCell"><div class="rkTop"><b>' + r + '</b>'
+    + (c > 0 ? '<span>/ ' + c + '</span>' : '')
+    + '</div><div class="rkSub ' + cls + '">'
+    + (pct != null ? '前 ' + pct + '%' : '位次')
+    + (dTxt ? ' <span class="delta ' + dCls + '">' + dTxt + '</span>' : '')
+    + '</div></div></td>';
+}
 function rowHTML(ex, withDel){
   const soc = SUBJ.map(s=>{
     const val = Number(ex.soc && ex.soc[s[0]]) || 0;
     const rate = val / s[1];
     return '<td' + (rate < 0.6 ? ' class="weak"' : '') + '>' + val + '</td>';
   }).join('');
-  const rank = (ex.rank ? ex.rank : '—') + (ex.count ? ' / ' + ex.count : '');
+  const rank = rankCell(ex, arguments[2] || {});
   return '<tr>'
     + '<td class="nm" data-edit="' + esc(ex.id) + '" style="cursor:pointer">' + esc(ex.name || '未命名') + '</td>'
     + '<td>' + esc(ex.date || '') + '</td>'
     + soc
     + '<td><b>' + total(ex) + '</b></td>'
-    + '<td>' + esc(rank) + '</td>'
+    + rank
     + (withDel ? '<td><button class="del" data-del="' + esc(ex.id) + '" aria-label="删除">×</button></td>' : '')
     + '</tr>';
 }
 function tableHTML(list, withDel){
-  return '<div class="tw"><table><thead><tr><th>考试</th><th>日期</th>'
-    + SUBJ.map(s=>'<th>' + s[0] + '</th>').join('')
-    + '<th>总分</th><th>位次</th>' + (withDel ? '<th></th>' : '') + '</tr></thead><tbody>'
-    + list.map(ex=>rowHTML(ex, withDel)).join('')
+  const rows = sortList(list), deltas = rankDeltaMap();
+  const ths = [['name','考试','1'],['date','日期','-1']]
+    .concat(SUBJ.map(s=>[s[0], s[0], '-1']))
+    .concat([['total','总分','-1'],['rank','位次','1']]);
+  return '<div class="tw"><table><thead><tr>'
+    + ths.map(t=>'<th class="sortable" data-sort="' + t[0] + '" data-def="' + t[2] + '"'
+      + (SORT.key === t[0] ? ' data-dir="' + SORT.dir + '"' : '') + '>' + t[1] + '</th>').join('')
+    + (withDel ? '<th></th>' : '')
+    + '</tr></thead><tbody>'
+    + rows.map(ex=>rowHTML(ex, withDel, deltas)).join('')
     + '</tbody></table></div>';
 }
 function updateTable(){
@@ -829,7 +943,8 @@ function updateTable(){
     wrap.innerHTML = tableHTML(v, true);
   }
   $('#cntHint').textContent = store.exams.length
-    ? ('共 ' + store.exams.length + ' 次 · 显示 ' + v.length + ' 次')
+    ? (flt === 'all' ? ('共 ' + store.exams.length + ' 次 · 最新在上')
+      : ('共 ' + store.exams.length + ' 次 · 显示最近 ' + v.length + ' 次'))
     : '';
 }
 
@@ -932,12 +1047,27 @@ function targetRect(){
   const vw = window.innerWidth, vh = window.innerHeight;
   const reserve = 76 + 62 + 16;
   const w = Math.round(Math.min(vw - pad * 2, 1000));
-  let h = Math.round(Math.min(vh - pad * 2 - reserve, 640));
+  let h = Math.round(Math.min(vh - pad - 142, 760));
   h = Math.max(300, h);
   const left = Math.round((vw - w) / 2);
   let top = Math.round((vh - reserve - h) / 2);
   if(top < pad) top = pad;
   return { left, top, width: w, height: h };
+}
+function rankBig(v){
+  const ri = rankInfo(v);
+  if(!ri) return '<div class="rkBig none"><div class="rkBigL"><div class="k">最新位次</div>'
+    + '<div class="v">—</div><div class="d">录成绩时顺手填位次，就能看到百分位</div></div></div>';
+  const fill = ri.pct == null ? 0 : Math.max(2.5, ri.pct);
+  const dl = ri.delta;
+  return '<div class="rkBig"><div class="rkBigL">'
+    + '<div class="k">最新位次 · ' + esc(ri.ex.name || '未命名') + '</div>'
+    + '<div class="v">' + ri.rank + (ri.count ? '<small> / ' + ri.count + '</small>' : '') + '</div>'
+    + '<div class="d">' + (ri.pct != null ? ('全校前 ' + ri.pct.toFixed(1) + '%') : '只填了位次')
+    + (dl != null && dl !== 0 ? '　<span class="delta ' + (dl > 0 ? 'up2' : 'down2') + '">' + (dl > 0 ? '↑' + dl : '↓' + Math.abs(dl)) + ' 名</span>' : '')
+    + '</div></div>'
+    + '<div class="rkBigR"><div class="pkbarbig"><i style="width:' + fill.toFixed(1) + '%"></i></div>'
+    + '<div class="rkScale"><span>最好</span><span>中位</span><span>最差</span></div></div></div>';
 }
 function statCard(k, v, unit){
   return '<div class="stat"><div class="k">' + k + '</div><div class="v">'
@@ -965,7 +1095,8 @@ function detailHTML(mod){
       + '</div>';
   }
   if(mod === 'total'){
-    return '<div id="dTrend" style="margin-bottom:16px"></div>'
+    return rankBig(v)
+      + '<div id="dTrend" style="margin-bottom:16px"></div>'
       + '<div class="statGrid">'
       + statCard('最近', last == null ? 0 : last, ' 分')
       + statCard('平均', Math.round(avg), ' 分')
@@ -1203,17 +1334,30 @@ function initDock(){
   const dock = $('#dock');
   const items = $$('.dockItem', dock);
   if(!items.length) return;
-  const centers = items.map(it=>it.offsetLeft + it.offsetWidth / 2);
-  dock.addEventListener('mousemove', e=>{
-    const rect = dock.getBoundingClientRect();
-    const x = e.clientX - rect.left - dock.clientLeft;
+  let centers = items.map(it=>it.offsetLeft + it.offsetWidth / 2);
+  let rect = null, raf = 0, tx = 0;
+  const measure = ()=>{
+    rect = dock.getBoundingClientRect();
+    centers = items.map(it=>it.offsetLeft + it.offsetWidth / 2);
+  };
+  measure();
+  window.addEventListener('resize', ()=>{ rect = null; });
+  const apply = x=>{
     items.forEach((it,i)=>{
       const d = Math.abs(x - centers[i]);
       const s = 1 + 0.62 * Math.max(0, 1 - d / 108);
       it.style.setProperty('--s', s.toFixed(3));
     });
+  };
+  dock.addEventListener('mouseenter', measure);
+  dock.addEventListener('mousemove', e=>{
+    if(!rect) measure();
+    tx = e.clientX - rect.left - dock.clientLeft;
+    if(raf) return;
+    raf = requestAnimationFrame(()=>{ raf = 0; apply(tx); });
   });
   dock.addEventListener('mouseleave', ()=>{
+    if(raf){ cancelAnimationFrame(raf); raf = 0; }
     items.forEach(it=>it.style.setProperty('--s', '1'));
   });
   items.forEach(it=>{
@@ -1308,9 +1452,9 @@ function doSave(){
   render();
 }
 const DEMO = [
-  { name:'九月联考', date:'2026-09-05', soc:{ '语文':110,'数学':100,'英语':86,'物理':72,'化学':76,'生物':84 }, rank:null, count:null, note:'一轮复习起步' },
-  { name:'十月月考', date:'2026-09-25', soc:{ '语文':114,'数学':108,'英语':90,'物理':76,'化学':80,'生物':90 }, rank:null, count:null, note:'物理受力分析开始稳' },
-  { name:'期中摸底', date:'2026-10-15', soc:{ '语文':118,'数学':112,'英语':94,'物理':80,'化学':84,'生物':90 }, rank:null, count:null, note:'' }
+  { name:'开学摸底', date:'2026-09-05', soc:{ '语文':110,'数学':100,'英语':86,'物理':72,'化学':76,'生物':84 }, rank:186, count:612, note:'一轮复习起步' },
+  { name:'九月月考', date:'2026-09-25', soc:{ '语文':114,'数学':108,'英语':90,'物理':76,'化学':80,'生物':90 }, rank:178, count:615, note:'物理受力分析开始稳' },
+  { name:'十月月考', date:'2026-10-15', soc:{ '语文':118,'数学':112,'英语':94,'物理':80,'化学':84,'生物':90 }, rank:165, count:618, note:'' }
 ];
 function loadDemo(){
   if(store.exams.length && !confirm('载入示例会覆盖现有 ' + store.exams.length + ' 条记录，继续？')) return;
@@ -1391,6 +1535,16 @@ function initEvents(){
       render();
     }
   });
+  document.addEventListener('click', e=>{
+    const th = e.target.closest('th[data-sort]');
+    if(!th) return;
+    e.stopPropagation();
+    const k = th.dataset.sort;
+    if(SORT.key === k){ SORT.dir = -SORT.dir; }
+    else { SORT.key = k; SORT.dir = Number(th.dataset.def) || 1; }
+    if(DSTATE.open && DSTATE.mod === 'table'){ refreshDetail(); }
+    else { updateTable(); }
+  }, true);
   $('#detailCard').addEventListener('click', e=>{
     const del = e.target.closest('[data-del]');
     if(del){
@@ -1410,7 +1564,7 @@ function initEvents(){
   $('#detailBackdrop').addEventListener('click', closeDetail);
   $$('#home [data-mod]').forEach(el=>{
     el.addEventListener('click', e=>{
-      if(e.target.closest('button, a, input, [data-edit], [data-del]')) return;
+      if(e.target.closest('button, a, input, th, [data-edit], [data-del]')) return;
       openDetail(el.dataset.mod, el.getBoundingClientRect());
     });
   });
