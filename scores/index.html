@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>成绩记录 · 天津 3+3</title>
+<style>
+:root{
+  --ink:#1B1B19; --ink2:#3A3733; --muted:#7A736B;
+  --copper:#B66D44; --teal:#4E9AA3; --teal-soft:#A9CDCB;
+  --card:rgba(255,255,255,.56); --line:rgba(255,255,255,.72);
+  --radius:24px;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  min-height:100vh; color:var(--ink);
+  font-family:"Plus Jakarta Sans","Manrope","Noto Sans SC",system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(152deg,#E4C0A6 0%,#D4B8AC 42%,#EBD7CC 100%);
+  background-attachment:fixed;
+  padding:18px 14px 40px;
+  font-feature-settings:"tnum" 1,"lnum" 1;
+}
+body::before,body::after{
+  content:"";position:fixed;border-radius:50%;filter:blur(50px);pointer-events:none;z-index:0;
+}
+body::before{width:420px;height:420px;left:-120px;top:-140px;background:radial-gradient(circle,#FFF6EC 0%,rgba(255,246,236,0) 70%)}
+body::after{width:380px;height:380px;right:-110px;top:120px;background:radial-gradient(circle,#CFE6E4 0%,rgba(207,230,228,0) 70%)}
+main{position:relative;z-index:1;max-width:1060px;margin:0 auto}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:6px 4px 18px;flex-wrap:wrap}
+h1{margin:0;font-size:34px;letter-spacing:-.6px;font-weight:800}
+.sub{margin:6px 0 0;font-size:12.5px;color:var(--ink2);opacity:.72;letter-spacing:.2px}
+h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.2px}
+.card{
+  background:var(--card);
+  backdrop-filter:blur(28px) saturate(140%);
+  -webkit-backdrop-filter:blur(28px) saturate(140%);
+  border:1px solid var(--line);
+  box-shadow:0 18px 40px -22px rgba(60,40,30,.45), inset 0 1px 0 rgba(255,255,255,.85);
+  border-radius:var(--radius);
+  padding:18px 20px;
+  margin-bottom:14px;
+}
+.cardhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.hint{font-size:11.5px;color:var(--muted)}
+.btn{
+  border:1px solid rgba(255,255,255,.8);
+  background:rgba(255,255,255,.5);
+  color:var(--ink); font:inherit; font-size:13px; font-weight:600;
+  padding:9px 15px; border-radius:14px; cursor:pointer;
+  backdrop-filter:blur(12px); transition:.18s;
+}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--ink);color:#FFF8F0;border-color:transparent;box-shadow:0 10px 22px -12px rgba(27,27,25,.9)}
+.btn.ghost{background:transparent}
+.btn.danger{color:#8E3B22}
+.acts{display:flex;gap:8px}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{
+  background:var(--card);backdrop-filter:blur(28px) saturate(140%);
+  border:1px solid var(--line);border-radius:20px;padding:14px 16px;
+  box-shadow:0 14px 30px -22px rgba(60,40,30,.5), inset 0 1px 0 rgba(255,255,255,.8);
+}
+.kpi .k{font-size:11.5px;color:var(--muted);letter-spacing:.3px}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-1px;margin-top:6px;line-height:1.05;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0}
+.kpi .d{font-size:11.5px;margin-top:6px;color:var(--muted)}
+.up{color:#4E8A6B}.down{color:#A4512F}
+
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px;align-items:stretch}
+.grid2 .card{margin-bottom:14px}
+
+/* 目标深色卡 */
+.dark{
+  background:#1B1B19; color:#F6EFE7; border-color:rgba(182,109,68,.34);
+  box-shadow:0 24px 50px -26px rgba(27,27,25,.9), inset 0 0 60px -20px rgba(182,109,68,.55);
+  position:relative; overflow:hidden;
+}
+.dark::after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-90px;border-radius:50%;
+  background:radial-gradient(circle,rgba(182,109,68,.5),rgba(182,109,68,0) 70%);pointer-events:none}
+.dark .kicker{font-size:11.5px;letter-spacing:2px;text-transform:uppercase;color:#B99C86}
+.dark .big{font-size:56px;font-weight:800;letter-spacing:-3px;line-height:1;margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.dark .of{font-size:12px;color:#9E9187}
+.dark .prog{height:5px;border-radius:99px;background:rgba(255,255,255,.14);margin:16px 0 10px;overflow:hidden}
+.dark .prog i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#E7A471,#B66D44)}
+.dark .tk{font-size:12px;color:#C8B8AB}
+.dark .alloc{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:7px;font-size:12px;color:#D9CCC0}
+.dark .alloc li{display:flex;justify-content:space-between;gap:8px}
+.dark .alloc b{font-weight:700;color:#FFF3E6;font-variant-numeric:tabular-nums}
+
+/* 单科 */
+.subs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.sucard{border-radius:18px;padding:12px 13px;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65)}
+.sucard .row1{display:flex;justify-content:space-between;align-items:center}
+.sucard .nm{font-size:13px;font-weight:700}
+.sucard .dt{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+.sucard .val{font-size:24px;font-weight:800;letter-spacing:-.8px;margin-top:6px;font-variant-numeric:tabular-nums}
+.sucard .val span{font-size:11px;color:var(--muted);font-weight:600}
+.sucard .bar{height:5px;border-radius:99px;background:rgba(27,27,25,.09);margin-top:9px;overflow:hidden}
+.sucard .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#E7A471,#C5A0AB)}
+.sucard svg{display:block;width:100%;height:34px;margin-top:8px}
+.tag{font-size:10px;padding:2px 7px;border-radius:9px;background:rgba(182,109,68,.14);color:#8E4F2B;font-weight:700}
+.tag.ok{background:rgba(78,154,163,.16);color:#2F6C74}
+
+/* 表格 */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+th{text-align:right;font-weight:600;color:var(--muted);font-size:11px;padding:0 8px 9px;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+td{padding:10px 8px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:nth-child(odd){background:rgba(255,255,255,.34)}
+tbody tr:hover{background:rgba(255,255,255,.55)}
+td.nm{font-weight:600;text-align:left}
+td .weak{color:#A4512F;font-weight:700}
+.del{border:0;background:transparent;color:#9E7261;font-size:16px;cursor:pointer;padding:2px 6px;border-radius:8px}
+.del:active{background:rgba(164,81,47,.12)}
+
+footer{display:flex;gap:8px;flex-wrap:wrap;margin:6px 2px 0}
+
+/* 抽屉 */
+.sheet{
+  position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(27,27,25,.34);backdrop-filter:blur(3px);
+}
+.sheet[hidden]{display:none}
+.panel{
+  width:100%;max-width:560px;max-height:92vh;overflow:auto;
+  background:linear-gradient(180deg,#FFF9F3,#FBEADF);
+  border-radius:26px 26px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));
+  box-shadow:0 -20px 50px -20px rgba(40,25,20,.5);
+  animation:up .26s cubic-bezier(.24,.9,.32,1);
+}
+@keyframes up{from{transform:translateY(24px);opacity:.4}to{transform:none;opacity:1}}
+.panel h3{margin:0 0 14px;font-size:17px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.field input,.field textarea{
+  width:100%;border:1px solid rgba(27,27,25,.14);background:rgba(255,255,255,.8);
+  border-radius:12px;padding:11px 12px;font:inherit;font-size:14px;color:var(--ink);
+  font-variant-numeric:tabular-nums;
+}
+.field input:focus,.field textarea:focus{outline:2px solid rgba(182,109,68,.35);outline-offset:1px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.six{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rowbtns{display:flex;gap:8px;margin-top:6px}
+.rowbtns .btn{flex:1;text-align:center;padding:12px}
+.empty{
+  padding:26px 10px;text-align:center;color:var(--muted);font-size:13px;line-height:1.9;
+}
+.empty button{margin-top:10px}
+@media (max-width:760px){
+  h1{font-size:28px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .subs{grid-template-columns:1fr 1fr}
+  .kpi .v{font-size:23px}
+}
+@media print{
+  body{background:#fff;padding:0}
+  body::before,body::after{display:none}
+  .card,.kpi{box-shadow:none;border-color:#ddd;background:#fff;backdrop-filter:none}
+  .dark{background:#1B1B19 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  header .acts,footer,.del,.hint{display:none}
+  .sheet{display:none !important}
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>成绩记录</h1>
+      <p class="sub">天津 3+3　　语文 150 ＋ 数学 150 ＋ 英语 150 ＋ 物理 100 ＋ 化学 100 ＋ 生物 100 ＝ 750</p>
+    </div>
+    <div class="acts">
+      <button class="btn primary" id="addBtn">＋ 记一次</button>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="grid2">
+    <div class="card">
+      <div class="cardhead"><h2>总分趋势</h2><span class="hint" id="trendHint">虚线为目标总分</span></div>
+      <div id="trendBox"></div>
+    </div>
+    <div class="card dark" id="targetCard"></div>
+  </section>
+
+  <section class="card">
+    <div class="cardhead"><h2>单科走势</h2><span class="hint">条为得分率，底线为近几次走向</span></div>
+    <div class="subs" id="subBox"></div>
+  </section>
+
+  <section class="card">
+    <div class="cardhead"><h2>考试记录</h2><span class="hint" id="cntHint"></span></div>
+    <div id="tableBox"></div>
+  </section>
+
+  <footer>
+    <button class="btn" id="expBtn">导出 JSON</button>
+    <button class="btn" id="impBtn">导入 JSON</button>
+    <button class="btn" id="demoBtn">载入示例</button>
+    <button class="btn ghost" id="printBtn">打印 / 存 PDF</button>
+    <button class="btn danger" id="clrBtn">清空全部</button>
+    <input type="file" id="impFile" accept=".json,application/json" hidden>
+  </footer>
+</main>
+
+<div class="sheet" id="sheet" hidden>
+  <div class="panel">
+    <h3 id="sheetTitle">记一次考试</h3>
+    <div class="two">
+      <div class="field"><label>考试名称</label><input id="fName" placeholder="如：十月月考"></div>
+      <div class="field"><label>日期</label><input id="fDate" type="date"></div>
+    </div>
+    <div class="six" id="scoreFields"></div>
+    <div class="two">
+      <div class="field"><label>校/区位次（可空）</label><input id="fRank" type="number" inputmode="numeric" placeholder="186"></div>
+      <div class="field"><label>参考人数（可空）</label><input id="fCount" type="number" inputmode="numeric" placeholder="612"></div>
+    </div>
+    <div class="field"><label>备注（可空）</label><input id="fNote" placeholder="如：英语阅读失分多 / 考前失眠"></div>
+    <div class="field"><label>目标总分</label><input id="fTarget" type="number" inputmode="numeric" placeholder="620"></div>
+    <div class="rowbtns">
+      <button class="btn ghost" id="cancelBtn">取消</button>
+      <button class="btn primary" id="saveBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var SUBJ = [['语文',150],['数学',150],['英语',150],['物理',100],['化学',100],['生物',100]];
+  var FULL = 750;
+  var KEY = 'tj_scores_v1';
+  var store = { meta:{ target:620 }, exams:[] };
+
+  /* ---------- 存储 ---------- */
+  function load(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(raw){ store = JSON.parse(raw); }
+    }catch(e){ /* 隐私模式降级为内存 */ }
+    if(!store.meta) store.meta = { target:620 };
+    if(!store.exams) store.exams = [];
+    store.exams.sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); });
+  }
+  function save(){
+    try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){}
+  }
+  function total(ex){
+    var s = 0, k;
+    for(k in ex.soc){ s += Number(ex.soc[k]) || 0; }
+    return s;
+  }
+  function blank(n){ return (n===null||n===undefined||n==='') ? '' : n; }
+
+  /* ---------- KPI ---------- */
+  function renderKpis(){
+    var box = document.getElementById('kpis');
+    var n = store.exams.length;
+    if(!n){ box.innerHTML = ''; return; }
+    var last = store.exams[n-1], prev = n>1 ? store.exams[n-2] : null;
+    var t = total(last), tp = prev ? total(prev) : null;
+    var d = tp===null ? null : (t - tp);
+    var pct = (last.rank && last.count) ? (last.rank/last.count*100) : null;
+    var target = Number(store.meta.target) || 620;
+    var gap = target - t;
+
+    var dtxt, dcls;
+    if(d===null){ dtxt = '首次记录'; dcls=''; }
+    else if(d>0){ dtxt = '↑ ' + d + ' 分'; dcls='up'; }
+    else if(d<0){ dtxt = '↓ ' + Math.abs(d) + ' 分'; dcls='down'; }
+    else { dtxt = '持平'; dcls=''; }
+
+    box.innerHTML =
+      kpi('最近总分', t, '<small>/750</small>', last.name || '') +
+      kpi('较上次', (d===null?'—':(d>0?'+'+d:d)), '', '<span class="'+dcls+'">'+dtxt+'</span>') +
+      kpi('位次', (pct===null?'—':Math.round(pct)), (pct===null?'':'<small>%</small>'),
+          last.rank ? ('第 '+last.rank+' / '+last.count) : '未填') +
+      kpi('距目标', (gap>0?gap:0), (gap>0?'<small>分</small>':'<small>达成</small>'),
+          '目标 ' + target);
+  }
+  function kpi(k,v,unit,d){
+    return '<div class="kpi"><div class="k">'+k+'</div><div class="v">'+v+(unit||'')+'</div><div class="d">'+d+'</div></div>';
+  }
+
+  /* ---------- 趋势图 ---------- */
+  function renderTrend(){
+    var box = document.getElementById('trendBox');
+    var n = store.exams.length;
+    if(!n){
+      box.innerHTML = '<div class="empty">还没有记录。<br>点右上角「＋ 记一次」，或先载入示例看看。</div>';
+      document.getElementById('trendHint').textContent = '虚线为目标总分';
+      return;
+    }
+    var W = 720, H = 260, L = 46, R = 74, T = 22, B = 40;
+    var vals = store.exams.map(total);
+    var target = Number(store.meta.target) || 620;
+    var hi = Math.max.apply(null, vals.concat([target]));
+    var lo = Math.min.apply(null, vals);
+    var pad = Math.max(20, (hi-lo)*0.35);
+    var ymax = Math.ceil((hi + pad)/10)*10;
+    var ymin = Math.max(0, Math.floor((lo - pad)/10)*10);
+    if(ymax - ymin < 60){ ymin = Math.max(0, ymax-60); }
+    function X(i){ return n===1 ? L + (W-L-R)/2 : L + i*(W-L-R)/(n-1); }
+    function Y(v){ return T + (ymax - v)*(H-T-B)/(ymax-ymin); }
+
+    var s = '<svg viewBox="0 0 '+W+' '+H+'" width="100%" preserveAspectRatio="xMidYMid meet" role="img">';
+    s += '<defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="0">' +
+         '<stop offset="0" stop-color="#E7A471"/><stop offset="1" stop-color="#C5A0AB"/></linearGradient>' +
+         '<linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">' +
+         '<stop offset="0" stop-color="#B66D44" stop-opacity=".18"/><stop offset="1" stop-color="#B66D44" stop-opacity="0"/></linearGradient></defs>';
+
+    /* 网格 */
+    var rows = 4, i, v, y;
+    for(i=0;i<=rows;i++){
+      v = ymin + (ymax-ymin)*i/rows;
+      y = Y(v);
+      s += '<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R)+'" y2="'+y.toFixed(1)+'" stroke="rgba(27,27,25,.10)" stroke-width="1"/>';
+      s += '<text x="'+(L-9)+'" y="'+(y+3.6).toFixed(1)+'" font-size="10" fill="#8C8680" text-anchor="end">'+Math.round(v)+'</text>';
+    }
+    /* 目标线 */
+    if(target >= ymin && target <= ymax){
+      y = Y(target);
+      s += '<line x1="'+L+'" y1="'+y.toFixed(1)+'" x2="'+(W-R+8)+'" y2="'+y.toFixed(1)+'" stroke="#B66D44" stroke-width="1.3" stroke-dasharray="6 5"/>';
+      s += '<text x="'+(W-R+12)+'" y="'+(y+3.6).toFixed(1)+'" font-size="10.5" fill="#B66D44" font-weight="700">目标 '+target+'</text>';
+    }
+    /* 面积 + 折线 */
+    var pts = store.exams.map(function(ex,idx){ return [X(idx), Y(total(ex))]; });
+    var line = pts.map(function(p){ return p[0].toFixed(1)+','+p[1].toFixed(1); }).join(' ');
+    if(pts.length > 1){
+      s += '<polygon fill="url(#ag)" points="'+L+','+Y(ymin)+' '+line+' '+(X(n-1))+','+Y(ymin)+'"/>';
+    }
+    s += '<polyline fill="none" stroke="url(#lg)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="'+line+'"/>';
+    /* 点 + 数值 */
+    pts.forEach(function(p, idx){
+      var showNum = (n<=6) || idx >= n-3;
+      s += '<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+(idx===n-1?5:4)+'" fill="#FFF9F2" stroke="#B66D44" stroke-width="2.2"/>';
+      if(showNum){
+        s += '<text x="'+p[0].toFixed(1)+'" y="'+(p[1]-11).toFixed(1)+'" font-size="11" font-weight="700" fill="#3A3733" text-anchor="middle">'+vals[idx]+'</text>';
+      }
+      /* x 轴标签 */
+      var nm = (store.exams[idx].name||'').slice(0,6);
+      var skip = n > 8 && idx % 2 === 1 && idx !== n-1;
+      if(!skip){
+        s += '<text x="'+p[0].toFixed(1)+'" y="'+(H-16)+'" font-size="10.5" fill="#7A736B" text-anchor="middle">'+esc(nm)+'</text>';
+      }
+      s += '<title>'+esc((store.exams[idx].name||'')+' '+store.exams[idx].date+'　总分 '+vals[idx])+'</title>';
+    });
+    s += '</svg>';
+    box.innerHTML = s;
+    document.getElementById('trendHint').textContent = '共 '+n+' 次记录'+(n>1?('，区间 '+Math.min.apply(null,vals)+'–'+Math.max.apply(null,vals)):'');
+  }
+
+  /* ---------- 单科 ---------- */
+  function renderSubs(){
+    var box = document.getElementById('subBox');
+    var n = store.exams.length;
+    if(!n){ box.innerHTML = '<div class="empty">六科得分率会显示在这里。</div>'; return; }
+    var last = store.exams[n-1], prev = n>1 ? store.exams[n-2] : null;
+    /* 找出最近一次得分率最低的两科 */
+    var rates = SUBJ.map(function(sp){ return [sp[0], (Number(last.soc[sp[0]])||0)/sp[1]]; });
+    var sorted = rates.slice().sort(function(a,b){ return a[1]-b[1]; });
+    var weak = [sorted[0] && sorted[0][0], sorted[1] && sorted[1][0]];
+
+    var html = SUBJ.map(function(sp){
+      var name = sp[0], full = sp[1];
+      var cur = Number(last.soc[name]) || 0;
+      var before = prev ? (Number(prev.soc[name])||0) : null;
+      var delta = before===null ? null : cur - before;
+      var rate = Math.round(cur/full*100);
+      var series = store.exams.map(function(e){ return Number(e.soc[name])||0; });
+      var tag = weak.indexOf(name) >= 0 ? '<span class="tag">弱项</span>' : '<span class="tag ok">稳</span>';
+      var dtxt = delta===null ? '<span class="dt" style="color:#8C8680">—</span>'
+        : '<span class="dt '+(delta>0?'up':(delta<0?'down':''))+'" style="color:'+(delta>0?'#4E8A6B':(delta<0?'#A4512F':'#8C8680'))+'">'+(delta>0?'+':'')+delta+'</span>';
+      return '<div class="sucard">' +
+        '<div class="row1"><span class="nm">'+name+' '+tag+'</span>'+dtxt+'</div>' +
+        '<div class="val">'+cur+'<span>/'+full+'</span></div>' +
+        '<div class="bar"><i style="width:'+Math.min(100,rate)+'%"></i></div>' +
+        spark(series, full) +
+      '</div>';
+    }).join('');
+    box.innerHTML = html;
+  }
+  function spark(series, full){
+    var W = 140, H = 34, n = series.length;
+    if(n === 0) return '<svg viewBox="0 0 '+W+' '+H+'"></svg>';
+    var hi = Math.max.apply(null, series), lo = Math.min.apply(null, series);
+    var span = Math.max(8, (hi-lo) || 8);
+    function X(i){ return n===1 ? W/2 : 2 + i*(W-4)/(n-1); }
+    function Y(v){ return H-4 - (v-(hi-span)/2)/ (span*1.15) * (H-10); }
+    var pts = series.map(function(v,i){ return X(i).toFixed(1)+','+Math.max(3,Math.min(H-3,Y(v))).toFixed(1); }).join(' ');
+    var s = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none">';
+    s += '<polyline fill="none" stroke="#8C8680" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'" opacity=".75"/>';
+    var lx = X(n-1), ly = Math.max(3,Math.min(H-3,Y(series[n-1])));
+    s += '<circle cx="'+lx.toFixed(1)+'" cy="'+ly.toFixed(1)+'" r="2.6" fill="#B66D44"/>';
+    s += '</svg>';
+    return s;
+  }
+
+  /* ---------- 目标卡 ---------- */
+  function renderTarget(){
+    var box = document.getElementById('targetCard');
+    var target = Number(store.meta.target) || 620;
+    var n = store.exams.length;
+    var last = n ? total(store.exams[n-1]) : 0;
+    var pct = Math.max(0, Math.min(100, Math.round(last/target*100)));
+    var gap = Math.max(0, target - last);
+    var alloc = SUBJ.map(function(sp){
+      var need = Math.round(target * sp[1] / FULL);
+      var cur = n ? (Number(store.exams[n-1].soc[sp[0]])||0) : 0;
+      var d = need - cur;
+      return { name: sp[0], need: need, cur: cur, d: d };
+    }).sort(function(a,b){ return b.d - a.d; }).slice(0,3);
+    var lines = alloc.map(function(a){
+      return '<li><span>'+a.name+' 目标 '+a.need+'</span><b>'+(a.cur? ('现 '+a.cur+'　'+(a.d>0?('差 '+a.d):'已达标')) : '未录入')+'</b></li>';
+    }).join('');
+    box.innerHTML =
+      '<div class="kicker">Target</div>' +
+      '<div class="big">'+target+'</div>' +
+      '<div class="of">目标总分　满分 750</div>' +
+      '<div class="prog"><i style="width:'+pct+'%"></i></div>' +
+      '<div class="tk">'+(n? ('最近 '+last+' 分　'+(gap>0?('还差 '+gap+' 分'):'已达成')) : '还没有成绩记录')+'</div>' +
+      '<ul class="alloc">'+lines+'</ul>';
+  }
+
+  /* ---------- 表格 ---------- */
+  function renderTable(){
+    var box = document.getElementById('tableBox');
+    var n = store.exams.length;
+    document.getElementById('cntHint').textContent = n ? (n+' 次') : '';
+    if(!n){ box.innerHTML = '<div class="empty">表里还空着。每次考完花两分钟填一下，比考完就忘强多了。</div>'; return; }
+    var rates = SUBJ.map(function(sp){ return [sp[0], (Number(store.exams[n-1].soc[sp[0]])||0)/sp[1]]; });
+    var sorted = rates.slice().sort(function(a,b){ return a[1]-b[1]; });
+    var weak = [sorted[0] && sorted[0][0], sorted[1] && sorted[1][0]];
+
+    var head = '<thead><tr><th>日期</th><th>考试</th>' + SUBJ.map(function(sp){ return '<th>'+sp[0]+'</th>'; }).join('') +
+               '<th>总分</th><th>位次</th><th>备注</th><th></th></tr></thead>';
+    var rows = store.exams.slice().reverse().map(function(ex){
+      var cells = SUBJ.map(function(sp){
+        var v = blank(ex.soc[sp[0]]);
+        var cls = (weak.indexOf(sp[0])>=0) ? ' class="weak"' : '';
+        return '<td'+cls+'>'+(v===''?'—':v)+'</td>';
+      }).join('');
+      var rk = ex.rank ? (ex.rank + (ex.count?(' / '+ex.count):'')) : '—';
+      return '<tr><td>'+esc(ex.date||'')+'</td><td class="nm">'+esc(ex.name||'')+'</td>'+cells+
+             '<td><b>'+total(ex)+'</b></td><td>'+rk+'</td><td style="text-align:right;color:#7A736B">'+esc(ex.note||'')+'</td>'+
+             '<td><button class="del" data-id="'+ex.id+'" title="删除">×</button></td></tr>';
+    }).join('');
+    box.innerHTML = '<div class="tw"><table>'+head+'<tbody>'+rows+'</tbody></table></div>';
+    Array.prototype.forEach.call(box.querySelectorAll('.del'), function(b){
+      b.addEventListener('click', function(){
+        var id = this.getAttribute('data-id');
+        var ex = store.exams.filter(function(e){ return e.id === id; })[0];
+        if(!ex) return;
+        if(confirm('删除「'+(ex.name||ex.date)+'」这条记录？')){
+          store.exams = store.exams.filter(function(e){ return e.id !== id; });
+          save(); render();
+        }
+      });
+    });
+  }
+
+  /* ---------- 抽屉表单 ---------- */
+  var fieldsBuilt = false;
+  function buildFields(){
+    if(fieldsBuilt) return;
+    var html = SUBJ.map(function(sp){
+      return '<div class="field"><label>'+sp[0]+'（满分 '+sp[1]+'）</label>' +
+             '<input id="s_'+sp[0]+'" type="number" inputmode="decimal" step="0.5" min="0" max="'+sp[1]+'" placeholder="0"></div>';
+    }).join('');
+    document.getElementById('scoreFields').innerHTML = html;
+    fieldsBuilt = true;
+  }
+  function openSheet(){
+    buildFields();
+    document.getElementById('fName').value = '';
+    document.getElementById('fDate').value = new Date().toISOString().slice(0,10);
+    document.getElementById('fRank').value = '';
+    document.getElementById('fCount').value = '';
+    document.getElementById('fNote').value = '';
+    document.getElementById('fTarget').value = store.meta.target || 620;
+    SUBJ.forEach(function(sp){ document.getElementById('s_'+sp[0]).value = ''; });
+    document.getElementById('sheet').hidden = false;
+  }
+  function closeSheet(){ document.getElementById('sheet').hidden = true; }
+  function doSave(){
+    var name = document.getElementById('fName').value.trim();
+    var date = document.getElementById('fDate').value || new Date().toISOString().slice(0,10);
+    var soc = {};
+    SUBJ.forEach(function(sp){
+      var v = parseFloat(document.getElementById('s_'+sp[0]).value);
+      soc[sp[0]] = isNaN(v) ? 0 : Math.max(0, Math.min(sp[1], v));
+    });
+    var sum = 0; for(var k in soc){ sum += soc[k]; }
+    if(!name) name = date + ' 考试';
+    if(sum <= 0){ alert('六科都是 0，先填一下分数吧。'); return; }
+    store.meta.target = Number(document.getElementById('fTarget').value) || store.meta.target || 620;
+    store.exams.push({
+      id: 'e' + Date.now(),
+      name: name, date: date, soc: soc,
+      rank: Number(document.getElementById('fRank').value) || null,
+      count: Number(document.getElementById('fCount').value) || null,
+      note: document.getElementById('fNote').value.trim()
+    });
+    store.exams.sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); });
+    save(); closeSheet(); render();
+  }
+
+  /* ---------- 导入导出 ---------- */
+  function exportJSON(){
+    var data = JSON.stringify(store, null, 2);
+    var blob = new Blob([data], { type:'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '成绩记录_' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  }
+  function importJSON(file){
+    var fr = new FileReader();
+    fr.onload = function(){
+      try{
+        var obj = JSON.parse(String(fr.result));
+        if(!obj || !obj.exams) throw new Error('结构不对');
+        store = obj;
+        if(!store.meta) store.meta = { target:620 };
+        store.exams.sort(function(a,b){ return (a.date||'').localeCompare(b.date||''); });
+        save(); render();
+      }catch(e){ alert('这个文件读不出来：' + e.message); }
+    };
+    fr.readAsText(file);
+  }
+  function loadDemo(){
+    if(store.exams.length && !confirm('会覆盖现有记录，继续？')) return;
+    store = {
+      meta:{ target:620, demo:true },
+      exams:[
+        { id:'d1', name:'开学摸底', date:'2026-09-05',
+          soc:{ '语文':104,'数学':118,'英语':88,'物理':68,'化学':74,'生物':76 },
+          rank:238, count:610, note:'暑假后状态没回来' },
+        { id:'d2', name:'九月月考', date:'2026-09-25',
+          soc:{ '语文':110,'数学':126,'英语':92,'物理':72,'化学':78,'生物':80 },
+          rank:196, count:612, note:'英语阅读失分多' },
+        { id:'d3', name:'十月月考', date:'2026-10-15',
+          soc:{ '语文':112,'数学':131,'英语':97,'物理':75,'化学':81,'生物':82 },
+          rank:171, count:615, note:'' }
+      ]
+    };
+    save(); render();
+  }
+
+  function esc(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'\u0022',"'":'&#39;'})[c];
+    });
+  }
+  function render(){ renderKpis(); renderTrend(); renderSubs(); renderTarget(); renderTable(); }
+
+  /* ---------- 事件 ---------- */
+  document.getElementById('addBtn').addEventListener('click', openSheet);
+  document.getElementById('cancelBtn').addEventListener('click', closeSheet);
+  document.getElementById('saveBtn').addEventListener('click', doSave);
+  document.getElementById('sheet').addEventListener('click', function(e){ if(e.target === this) closeSheet(); });
+  document.getElementById('expBtn').addEventListener('click', exportJSON);
+  document.getElementById('impBtn').addEventListener('click', function(){ document.getElementById('impFile').click(); });
+  document.getElementById('impFile').addEventListener('change', function(){
+    if(this.files && this.files[0]) importJSON(this.files[0]);
+    this.value = '';
+  });
+  document.getElementById('demoBtn').addEventListener('click', loadDemo);
+  document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+  document.getElementById('clrBtn').addEventListener('click', function(){
+    if(!store.exams.length) return;
+    if(confirm('清空全部记录？建议先导出 JSON 备份。')){
+      store = { meta:{ target: store.meta.target || 620 }, exams:[] };
+      save(); render();
+    }
+  });
+
+  load(); render();
+})();
+</script>
+</body>
+</html>
