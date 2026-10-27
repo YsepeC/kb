@@ -535,7 +535,7 @@ function createChart(host, opt){
       tv.style.display = showNum ? '' : 'none';
       if(showNum){
         tv.setAttribute('x', p.x.toFixed(1));
-        tv.setAttribute('y', (p.y - 11).toFixed(1));
+        tv.setAttribute('y', (p.y - 13).toFixed(1));
         tv.textContent = Math.round(rp.v);
       }
       const skip = n > 8 && i % 2 === 1 && i !== n-1;
@@ -1067,8 +1067,18 @@ function cardNeed(){
 function fitDetailHeight(){
   if(!DSTATE.open) return;
   const t = targetRect();
-  const card = $('#detailCard');
-  const h = Math.min(t.height, Math.max(300, cardNeed()));
+  const card = $('#detailCard'), body = $('#dcBody');
+  let h = Math.min(t.height, Math.max(300, cardNeed()));
+  if(body){
+    for(let k = 0; k < 3; k++){
+      card.style.height = h + 'px';
+      const over = body.scrollHeight - body.clientHeight;
+      if(over <= 1) break;
+      const nh = Math.min(t.height, h + over + 2);
+      if(nh <= h) break;
+      h = nh;
+    }
+  }
   const reserve = 76 + 62 + 16;
   let top = Math.round((window.innerHeight - reserve - h) / 2);
   if(top < 14) top = 14;
@@ -1082,8 +1092,23 @@ function refreshDetail(){
   const body = $('#dcBody');
   body.innerHTML = detailHTML(mod);
   if(mod === 'total'){
-    const host = $('#dTrend', body);
-    if(host){ const c = createChart(host, { W:760, H:330, L:52, R:86, T:22, B:44, dur:560 }); c.animate(); }
+    const h = window.innerWidth < 560 ? 236 : 272;
+    const draw = ()=>{
+      const host = $('#dTrend', body);
+      if(!host) return;
+      const w = Math.max(520, Math.round(host.getBoundingClientRect().width) || 760);
+      const c = createChart(host, { W:w, H:h, L:46, R:76, T:18, B:36, dur:520 }); c.animate();
+    };
+    draw();
+    clearTimeout(refreshDetail._t);
+    refreshDetail._t = setTimeout(()=>{
+      if(DSTATE.open && DSTATE.mod === 'total'){
+        draw();
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          if(DSTATE.open && DSTATE.mod === 'total') fitDetailHeight();
+        }));
+      }
+    }, 640);
   }
   if(mod === 'single'){
     $$('[data-sp]', body).forEach(svg=>{
