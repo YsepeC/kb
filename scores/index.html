@@ -1047,7 +1047,9 @@ function targetRect(){
   const vw = window.innerWidth, vh = window.innerHeight;
   const reserve = 76 + 62 + 16;
   const w = Math.round(Math.min(vw - pad * 2, 1000));
-  let h = Math.round(Math.min(vh - pad - 142, 760));
+  // 缩略条 fixed bottom:88px、实测高 82px -> 其顶边 = vh-170
+  // 卡片底边须停在它上方，故再让出 12px 间隙
+  let h = Math.round(Math.min(vh - pad - 182, 760));
   h = Math.max(300, h);
   const left = Math.round((vw - w) / 2);
   let top = Math.round((vh - reserve - h) / 2);
