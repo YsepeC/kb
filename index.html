@@ -15,6 +15,9 @@
     --glow:rgba(124,108,246,.42); --shadow:0 18px 50px rgba(0,0,0,.45);
     --serif:"Noto Serif SC","Songti SC",Georgia,"Times New Roman",serif;
     --blur:saturate(160%) blur(18px);
+    --hero-filter:blur(40px) saturate(140%) brightness(.58);
+    --hero-veil:linear-gradient(to bottom, transparent 6%, var(--bg1) 94%);
+    --fx-type:bubble;
   }
   html[data-theme="sakura"]{
     --bg1:#fffafc; --bg2:#ffeef4; --bg3:#ffe2ec;
@@ -23,6 +26,9 @@
     --text:#31242c; --muted:#946e7d;
     --accent:#d95f86; --accent2:#f2a0bb; --danger:#c93d5c;
     --glow:rgba(217,95,134,.3); --shadow:0 18px 44px rgba(150,80,110,.18);
+    --hero-filter:blur(44px) saturate(118%) brightness(1.14);
+    --hero-veil:linear-gradient(to bottom, color-mix(in srgb,var(--bg1) 55%, transparent) 2%, var(--bg1) 96%);
+    --fx-type:petal;
   }
   html[data-theme="noir"]{
     --bg1:#070606; --bg2:#19130f; --bg3:#241b12;
@@ -31,6 +37,9 @@
     --text:#f4edda; --muted:#b0a288;
     --accent:#c9a227; --accent2:#f2dfa0; --danger:#e0664f;
     --glow:rgba(201,162,39,.32); --shadow:0 18px 44px rgba(0,0,0,.5);
+    --hero-filter:blur(40px) saturate(130%) brightness(.5);
+    --hero-veil:linear-gradient(to bottom, transparent 6%, var(--bg1) 94%);
+    --fx-type:spark;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;margin:0}
@@ -61,6 +70,26 @@
     14%{opacity:.5}
     100%{transform:translate3d(30px,-14vh,0) scale(1.2);opacity:0}
   }
+  .aurora{position:fixed;inset:-25% -15%;z-index:0;pointer-events:none;filter:blur(80px);opacity:.5}
+  .aurora i{position:absolute;border-radius:50%;display:block;mix-blend-mode:screen;animation:drift 28s ease-in-out infinite alternate}
+  .aurora i:nth-child(2){animation-duration:36s;animation-direction:alternate-reverse}
+  .aurora i:nth-child(3){animation-duration:44s}
+  @keyframes drift{from{transform:translate3d(-4%,-3%,0) scale(1)}to{transform:translate3d(7%,5%,0) scale(1.14)}}
+  .fx i.petal{
+    border-radius:62% 0 62% 0;border:0;
+    background:linear-gradient(135deg, color-mix(in srgb,var(--accent) 34%, #fff), color-mix(in srgb,var(--accent2) 62%, #fff));
+    animation-name:fall;
+  }
+  @keyframes fall{
+    0%{transform:translate3d(0,-12vh,0) rotate(0deg);opacity:0}
+    12%{opacity:.8}
+    100%{transform:translate3d(46px,112vh,0) rotate(340deg);opacity:0}
+  }
+  .fx i.spark{
+    border:0;background:radial-gradient(circle, color-mix(in srgb,var(--accent2) 95%,#fff), transparent 70%);
+    animation-name:twinkle;
+  }
+  @keyframes twinkle{0%,100%{opacity:.06;transform:scale(.6)}50%{opacity:.85;transform:scale(1)}}
   .screen{position:fixed;inset:0;display:flex;flex-direction:column;z-index:1;opacity:0;pointer-events:none;transform:translateX(14px);transition:opacity .22s ease, transform .22s ease}
   .screen.on{opacity:1;pointer-events:auto;transform:none}
 
@@ -114,8 +143,8 @@
   /* ============ 聊天 ============ */
   .chat-wrap{position:relative;flex:1;display:flex;flex-direction:column;min-height:0}
   .chat-hero{position:absolute;left:0;right:0;top:0;height:230px;overflow:hidden;pointer-events:none;z-index:0}
-  .chat-hero .bg{position:absolute;inset:-50px;background-size:cover;background-position:center;filter:blur(38px) saturate(140%) brightness(.6);transform:scale(1.18)}
-  .chat-hero .overlay{position:absolute;inset:0;background:linear-gradient(to bottom, transparent 10%, var(--bg1) 94%)}
+  .chat-hero .bg{position:absolute;inset:-50px;background-size:cover;background-position:center;filter:var(--hero-filter);transform:scale(1.18)}
+  .chat-hero .overlay{position:absolute;inset:0;background:var(--hero-veil)}
   .chat-head{
     position:relative;z-index:3;display:flex;align-items:center;gap:12px;padding:14px 15px;
     padding-top:calc(14px + env(safe-area-inset-top));
@@ -230,7 +259,7 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v6</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
     <button class="iconbtn" id="btnSettings" title="设置">⚙</button>
@@ -339,7 +368,10 @@
       <button class="btn" id="btnImportAll">导入备份</button>
       <input type="file" id="importAllFile" accept="application/json,.json" hidden>
     </div>
-    <div class="btnrow"><button class="btn danger" id="btnClearAll">清空全部角色与对话</button></div>
+    <div class="btnrow">
+      <button class="btn" id="btnRepair">修复乱码角色</button>
+      <button class="btn danger" id="btnClearAll">清空全部角色与对话</button>
+    </div>
     <p class="hint">纯静态：角色、对话、记忆、API Key 都只存在这台设备的浏览器里。</p>
   </div>
 </section>
@@ -352,12 +384,27 @@
   'use strict';
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const LS = { cfg: 'lumen5.cfg', chars: 'lumen5.chars', chats: 'lumen5.chats', mem: 'lumen5.mem', theme: 'lumen5.theme' };
+  const LS = { cfg: 'lumen6.cfg', chars: 'lumen6.chars', chats: 'lumen6.chats', mem: 'lumen6.mem', theme: 'lumen6.theme' };
+  const LEGACY = ['lumen5','lumen4','lumen3'];
   const DEFAULT_CFG = { base: 'https://api.deepseek.com', model: 'deepseek-chat', key: '', temp: 0.88, autoMem: true };
   const HISTORY = 12, FOLD_AT = 12;
 
   const load = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? JSON.parse(JSON.stringify(d)) : JSON.parse(v); } catch { return JSON.parse(JSON.stringify(d)); } };
   const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch { toast('存储满了，清掉一些旧对话吧'); } };
+
+  const looksMojibake = v => typeof v === 'string' && /[\u00c3\u00c2\u00e5\u00e6\u00e8\u00e9]/.test(v) && !/[\u4e00-\u9fa5]/.test(v);
+  function migrateLegacy() {
+    if (localStorage.getItem(LS.chars)) return;
+    for (const key of LEGACY) {
+      const old = load(key + '.chars', []);
+      if (!Array.isArray(old) || !old.length) continue;
+      const good = old.filter(c => c && !looksMojibake(c.name) && !looksMojibake(c.greet || '') && !looksMojibake(c.tag || ''));
+      if (good.length) { chars = good; save(LS.chars, chars); }
+      const oldChats = load(key + '.chats', {});
+      if (oldChats && typeof oldChats === 'object') { chats = oldChats; save(LS.chats, chats); }
+      break;
+    }
+  }
 
   let cfg = Object.assign({}, DEFAULT_CFG, load(LS.cfg, {}));
   let chars = load(LS.chars, []);
@@ -398,14 +445,30 @@
   }
   function buildFx() {
     const fx = $('#fx'); fx.innerHTML = '';
-    for (let i = 0; i < 14; i++) {
+    const aurora = document.createElement('div'); aurora.className = 'aurora';
+    for (let i = 0; i < 3; i++) {
       const b = document.createElement('i');
-      const size = 7 + Math.random() * 52;
+      const size = 36 + Math.random() * 34;
+      b.style.width = b.style.height = size + 'vmin';
+      b.style.left = (i * 30 + Math.random() * 20) + '%';
+      b.style.top = (Math.random() * 60 - 10) + '%';
+      b.style.background = (i % 2 ? 'radial-gradient(circle, color-mix(in srgb, var(--accent2) 55%, transparent), transparent 66%)'
+                                  : 'radial-gradient(circle, color-mix(in srgb, var(--accent) 60%, transparent), transparent 68%)');
+      aurora.append(b);
+    }
+    fx.append(aurora);
+
+    const kind = { midnight: 'bubble', sakura: 'petal', noir: 'spark' }[theme] || 'bubble';
+    const n = kind === 'spark' ? 22 : kind === 'petal' ? 18 : 14;
+    for (let i = 0; i < n; i++) {
+      const b = document.createElement('i');
+      if (kind !== 'bubble') b.className = kind;
+      const size = kind === 'petal' ? (9 + Math.random() * 10) : kind === 'spark' ? (3 + Math.random() * 4) : (7 + Math.random() * 46);
       b.style.width = b.style.height = size + 'px';
       b.style.left = Math.random() * 100 + '%';
-      b.style.animationDuration = (18 + Math.random() * 26) + 's';
-      b.style.animationDelay = (-Math.random() * 34) + 's';
-      b.style.opacity = (0.12 + Math.random() * 0.38).toFixed(2);
+      b.style.animationDuration = (kind === 'spark' ? (3 + Math.random() * 4) : (16 + Math.random() * 24)) + 's';
+      b.style.animationDelay = (-Math.random() * (kind === 'spark' ? 6 : 30)) + 's';
+      b.style.opacity = kind === 'spark' ? '.0' : (0.14 + Math.random() * 0.34).toFixed(2);
       fx.append(b);
     }
   }
@@ -866,6 +929,14 @@
       renderLibrary(); toast('导入完成');
     } catch { toast('文件格式不对'); }
   };
+  $('#btnRepair').onclick = async () => {
+    const before = chars.length;
+    chars = chars.filter(c => !looksMojibake(c.name) && !looksMojibake(c.greet || '') && !looksMojibake(c.tag || '') && !looksMojibake(c.desc || ''));
+    save(LS.chars, chars);
+    await seedExample(true);
+    renderLibrary();
+    toast(before !== chars.length ? '已清掉乱码角色并重载示例' : '示例角色已重载');
+  };
   $('#btnClearAll').onclick = () => {
     if (!confirm('清空这台设备上的全部角色、对话和记忆？不能撤销。')) return;
     Object.values(LS).forEach(k => localStorage.removeItem(k));
@@ -874,8 +945,8 @@
   $('#sheetMask').onclick = e => { if (e.target.id === 'sheetMask') closeSheet(); };
 
   /* ---------- 首次载入示例角色 ---------- */
-  async function seedExample() {
-    if (chars.length) return;
+  async function seedExample(force) {
+    if (chars.length && !force) return;
     try {
       const res = await fetch('cards/dafeiyu.png');
       if (!res.ok) return;
@@ -885,6 +956,7 @@
     } catch {}
   }
 
+  migrateLegacy();
   applyTheme(theme);
   renderLibrary();
   renderSettings();
