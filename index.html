@@ -566,7 +566,7 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v13</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v14</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
   </div>
@@ -649,6 +649,12 @@
           <label>全局设定（所有角色共用）</label>
           <textarea id="cfgWorld" placeholder="例如：本世界为九州，修士分炼气筑基金丹元婴四境；语言偏古雅，称呼用“道友”。"></textarea>
         </div>
+        <div class="btnrow" style="margin-top:8px">
+          <button class="btn" id="btnLoadWorld">载入《临江夜行》</button>
+          <button class="btn" id="btnImportWorld">导入文件</button>
+          <button class="btn" id="btnExportWorld">导出</button>
+          <input type="file" id="worldFile" accept=".md,.txt,text/markdown,text/plain" hidden>
+        </div>
         <p class="hint">会注入每轮对话最前面，用来固定世界观、专有名词、禁忌规则。单个角色也可以在自己编辑页里写世界设定，两者会叠加。</p>
 
         <div class="divider"></div>
@@ -660,6 +666,7 @@
 【旁白】… =>
 /\*\*(.+?)\*\*/g => *$1*"></textarea>
         </div>
+        <div class="btnrow" style="margin-top:8px"><button class="btn" id="btnLoadRegex">载入推荐规则</button></div>
         <p class="hint">格式：<code>匹配 => 替换</code>，按顺序执行；写成 <code>/pattern/flags => 替换</code> 可用正则，否则按纯文本替换。</p>
 
         <div class="divider"></div>
@@ -1521,6 +1528,40 @@
   });
   $('#cfgTheme').onchange = e => applyTheme(e.target.value);
   $('#cfgAutoMem').onchange = e => { cfg.autoMem = e.target.value === '1'; save(LS.cfg, cfg); };
+  $('#btnLoadWorld').onclick = async () => {
+    try {
+      const r = await fetch('worldbook/modern.md', { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const t = await r.text();
+      $('#cfgWorld').value = t; cfg.world = t; save(LS.cfg, cfg);
+      toast('已载入《临江夜行》· ' + t.length + ' 字');
+    } catch (e) { toast('载入失败：' + (e.message || e)); }
+  };
+  $('#btnImportWorld').onclick = () => $('#worldFile').click();
+  $('#worldFile').onchange = async e => {
+    const f = e.target.files?.[0]; if (!f) return;
+    const t = await f.text();
+    $('#cfgWorld').value = t; cfg.world = t; save(LS.cfg, cfg);
+    toast('已导入世界书 · ' + t.length + ' 字');
+  };
+  $('#btnExportWorld').onclick = () => {
+    const t = $('#cfgWorld').value || '';
+    if (!t.trim()) return toast('世界书是空的');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([t], { type: 'text/markdown' }));
+    a.download = '世界书.md'; a.click();
+  };
+  $('#btnLoadRegex').onclick = async () => {
+    try {
+      const r = await fetch('worldbook/regex.txt', { cache: 'no-store' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const t = await r.text();
+      const cur = $('#cfgRegex').value.trim();
+      $('#cfgRegex').value = cur ? cur + '\n' + t : t;
+      cfg.regex = $('#cfgRegex').value; save(LS.cfg, cfg);
+      toast('已载入推荐正则');
+    } catch (e) { toast('载入失败：' + (e.message || e)); }
+  };
   $('#btnTestCfg').onclick = async () => {
     $('#btnSaveCfg').click(); toast('测试中…');
     try { const r = await apiFetch('/models', { headers: { Authorization: 'Bearer ' + cfg.key } }); if (!r.ok) throw new Error('HTTP ' + r.status); const d = await r.json(); toast('连接正常（' + ((d.data || []).length) + ' 个模型）'); }
