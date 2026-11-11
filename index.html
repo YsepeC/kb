@@ -158,6 +158,54 @@
   .nav-item.on{color:var(--text);background:color-mix(in srgb,var(--accent) 12%,transparent)}
   .nav-item.on .nav-ico{color:var(--accent);text-shadow:0 0 14px var(--glow)}
   .settings-body{display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
+  .toolbar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+  .tb-select{
+    flex:0 0 auto;border:1px solid var(--line);background:var(--panel);color:var(--text);
+    border-radius:12px;padding:9px 10px;font-size:12.5px;backdrop-filter:var(--blur);outline:none;
+  }
+  .tb-search{
+    flex:1;display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:var(--panel);
+    border-radius:12px;padding:0 12px;height:40px;backdrop-filter:var(--blur);min-width:0;
+  }
+  .tb-search span{color:var(--muted);font-size:15px}
+  .tb-search input{flex:1;border:0;background:none;color:var(--text);font:inherit;font-size:13px;outline:none;min-width:0}
+  .tb-chip{
+    flex:0 0 auto;border:1px solid var(--line);background:var(--panel);color:var(--muted);
+    border-radius:12px;height:40px;padding:0 13px;font-size:12.5px;cursor:pointer;backdrop-filter:var(--blur);
+  }
+  .tb-chip em{font-style:normal;color:var(--accent);margin-left:2px}
+  .tb-chip.tb-icon{font-size:15px;padding:0 14px;color:var(--danger)}
+  .pager{
+    display:flex;align-items:center;justify-content:center;gap:14px;height:42px;margin-bottom:12px;
+    border:1px solid var(--line);border-radius:12px;background:var(--panel);backdrop-filter:var(--blur);
+    font-size:13px;letter-spacing:.05em;
+  }
+  .pager button{border:0;background:none;color:var(--muted);font-size:17px;cursor:pointer;padding:2px 8px;transition:.15s}
+  .pager button:active{color:var(--accent)}
+  .pager button:disabled{opacity:.25}
+  .pager .pg-idx{color:var(--muted);font-family:ui-monospace,monospace}
+  .pager .pg-idx b{color:var(--text);font-weight:600}
+  .card .cbody{padding:9px 10px 11px;text-align:center}
+  .card .cbody .badges{display:flex;gap:5px;justify-content:center;margin-bottom:6px;flex-wrap:wrap}
+  .card .cbody .badges i{
+    font-style:normal;font-size:9.5px;padding:2px 6px;border-radius:5px;
+    border:1px solid color-mix(in srgb,var(--accent2) 40%,transparent);
+    color:var(--accent2);background:color-mix(in srgb,var(--accent2) 12%,transparent);
+  }
+  .card .cbody .badges i.b2{border-color:color-mix(in srgb,var(--accent) 38%,transparent);color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .card .cbody .cname{font-family:var(--serif);font-weight:600;font-size:14px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .card .cbody .ctags{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;margin-top:7px}
+  .card .cbody .ctags u{
+    text-decoration:none;font-size:10px;padding:2px 7px;border-radius:999px;
+    background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent);
+  }
+  .nav-add{
+    flex:0 0 auto;width:56px;height:56px;margin:-18px 6px 0;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(140deg,var(--accent),color-mix(in srgb,var(--accent) 45%,var(--accent2)));
+    color:#fff;font-size:27px;line-height:1;display:grid;place-items:center;
+    box-shadow:0 10px 26px var(--glow), inset 0 1px 0 rgba(255,255,255,.35);transition:.15s;
+  }
+  .nav-add:active{transform:scale(.94)}
   .chat-list{display:flex;flex-direction:column;gap:10px}
   .chat-item{
     display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;cursor:pointer;
@@ -188,7 +236,7 @@
   .card .thumb img{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.01);transition:transform .4s}
   .card:active .thumb img{transform:scale(1.04)}
   .card .thumb .ph{font-size:36px;opacity:.8;filter:drop-shadow(0 2px 10px var(--glow))}
-  .card .info{position:absolute;left:0;right:0;bottom:0;padding:34px 12px 12px;background:linear-gradient(transparent, rgba(6,8,14,.9) 68%)}
+  .card .info{display:none}
   .card .name{font-family:var(--serif);font-weight:600;font-size:15px;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.75)}
   .card .tag{font-size:11px;color:rgba(255,255,255,.72);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   @keyframes rise{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
@@ -518,91 +566,117 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v10</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v11</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
-    <button class="iconbtn" id="btnSettings" title="设置">⚙</button>
   </div>
+
   <div class="lib">
+    <!-- 角色 -->
     <div id="paneChars">
+      <div class="toolbar">
+        <select class="tb-select" id="sizeChars">
+          <option value="12">12个/页</option>
+          <option value="24">24个/页</option>
+          <option value="48">48个/页</option>
+        </select>
+        <div class="tb-search"><span>⌕</span><input id="qChars" placeholder="搜索角色…"></div>
+        <button class="tb-chip" id="btnFilter"><span>♡</span> <em>全部</em></button>
+      </div>
+      <div class="pager" id="pagerChars"></div>
       <div class="cards" id="cards"></div>
       <div class="empty-lib" id="emptyLib">
         <div class="orb"></div>
         还没有角色。<br>
-        点右下角 <b>＋ 新角色</b> 现场捏一个，<br>或者导入 <b>JSON / PNG 角色卡</b>。<br>
+        点底部中间的 <b>＋</b> 现场捏一个，<br>或者导入 <b>JSON / PNG 角色卡</b>。<br>
         <span style="opacity:.72">支持 Tavern · SillyTavern · Chub v2</span>
       </div>
     </div>
+
+    <!-- 回忆 -->
     <div id="paneChats" style="display:none">
+      <div class="toolbar">
+        <select class="tb-select" id="sizeChats">
+          <option value="10">10条/页</option>
+          <option value="20">20条/页</option>
+          <option value="50">50条/页</option>
+        </select>
+        <div class="tb-search"><span>⌕</span><input id="qChats" placeholder="搜索回忆…"></div>
+        <button class="tb-chip tb-icon" id="btnPurge" title="清空全部对话">🗑</button>
+      </div>
+      <div class="pager" id="pagerChats"></div>
       <div class="chat-list" id="chatList"></div>
       <div class="empty-lib" id="emptyChats">
         <div class="orb"></div>
-        还没有对话。<br>
-        去 <b>角色卡</b> 挑一个开聊吧。
+        还没有回忆。<br>
+        去 <b>角色</b> 里挑一个开聊吧。
       </div>
     </div>
+
+    <!-- 连接 -->
+    <div id="paneConnect" style="display:none">
+      <div class="settings-body">
+        <div class="sec-title">模型接口</div>
+        <div class="field"><label>Base URL</label><input id="cfgBase" placeholder="https://api.deepseek.com"></div>
+        <div class="field"><label>API Key（只存这台设备）</label><input id="cfgKey" type="password" placeholder="sk-…" autocomplete="off"></div>
+        <div class="field">
+          <label>模型</label>
+          <div style="display:flex;gap:8px">
+            <input id="cfgModel" placeholder="deepseek-chat" style="flex:1">
+            <button class="btn" id="btnFetchModels" style="white-space:nowrap;padding:11px 14px">拉取列表</button>
+          </div>
+          <select id="cfgModelSelect" style="margin-top:8px;display:none"></select>
+        </div>
+        <div class="field"><label>温度（0.6 稳 / 1.0 野）</label><input id="cfgTemp" type="number" min="0" max="2" step="0.05"></div>
+        <div class="btnrow"><button class="btn primary" id="btnSaveCfg">保存</button><button class="btn" id="btnTestCfg">测试连接</button></div>
+        <div class="btnrow"><button class="btn primary" id="btnSaveCfg2" style="flex:1">保存并返回</button></div>
+      </div>
+    </div>
+
+    <!-- 设置 -->
     <div id="paneSettings" style="display:none">
-<div class="settings-body">
-    <div class="sec-title">模型接口</div>
-    <div class="field"><label>Base URL</label><input id="cfgBase" placeholder="https://api.deepseek.com"></div>
-    <div class="field"><label>API Key（只存这台设备）</label><input id="cfgKey" type="password" placeholder="sk-…" autocomplete="off"></div>
-    <div class="field">
-      <label>模型</label>
-      <div style="display:flex;gap:8px">
-        <input id="cfgModel" placeholder="deepseek-chat" style="flex:1">
-        <button class="btn" id="btnFetchModels" style="white-space:nowrap;padding:11px 14px">拉取列表</button>
+      <div class="settings-body">
+        <div class="sec-title">长期记忆</div>
+        <div class="field"><label>自动整理前情</label>
+          <select id="cfgAutoMem"><option value="1">开（每段对话自动摘要一次）</option><option value="0">关（只能手动整理）</option></select>
+        </div>
+        <p class="hint">开启后，旧剧情会被压成一段「前情提要」长期保留，不会因为消息太多而被忘掉。</p>
+
+        <div class="divider"></div>
+        <div class="sec-title">外观</div>
+        <div class="field"><label>主题</label>
+          <select id="cfgTheme">
+            <option value="midnight">午夜紫（暗）</option>
+            <option value="sakura">樱花（亮）</option>
+            <option value="noir">黑金（暗）</option>
+            <option value="endfield">终末地（浅 · 工业）</option>
+            <option value="xianxia">修仙（浅 · 宣纸）</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+        <div class="sec-title">数据</div>
+        <div class="btnrow">
+          <button class="btn" id="btnExportAll">导出全部</button>
+          <button class="btn" id="btnImportAll">导入备份</button>
+          <input type="file" id="importAllFile" accept="application/json,.json" hidden>
+        </div>
+        <div class="btnrow">
+          <button class="btn" id="btnRepair">修复乱码角色</button>
+          <button class="btn danger" id="btnClearAll">清空全部</button>
+        </div>
+        <p class="hint">纯静态：角色、对话、记忆、API Key 都只存在这台设备的浏览器里。</p>
       </div>
-      <select id="cfgModelSelect" style="margin-top:8px;display:none"></select>
-    </div>
-    <div class="field"><label>温度（0.6 稳 / 1.0 野）</label><input id="cfgTemp" type="number" min="0" max="2" step="0.05"></div>
-    <div class="btnrow"><button class="btn primary" id="btnSaveCfg">保存</button><button class="btn" id="btnTestCfg">测试连接</button></div>
-
-    <div class="divider"></div>
-    <div class="sec-title">长期记忆</div>
-    <div class="field"><label>自动整理前情</label>
-      <select id="cfgAutoMem"><option value="1">开（每段对话自动摘要一次）</option><option value="0">关（只能手动整理）</option></select>
-    </div>
-    <p class="hint">开启后，旧剧情会被压成一段「前情提要」长期保留，不会因为消息太多而被忘掉。可以在聊天菜单里手动查看和编辑。</p>
-
-    <div class="divider"></div>
-    <div class="sec-title">外观</div>
-    <div class="field"><label>主题</label>
-      <select id="cfgTheme">
-        <option value="midnight">午夜紫（暗）</option>
-        <option value="sakura">樱花（亮）</option>
-        <option value="noir">黑金（暗）</option>
-        <option value="endfield">终末地（浅 · 工业）</option>
-        <option value="xianxia">修仙（浅 · 宣纸）</option>
-      </select>
-    </div>
-
-    <div class="divider"></div>
-    <div class="sec-title">数据</div>
-    <div class="btnrow">
-      <button class="btn" id="btnExportAll">导出全部</button>
-      <button class="btn" id="btnImportAll">导入备份</button>
-      <input type="file" id="importAllFile" accept="application/json,.json" hidden>
-    </div>
-    <div class="btnrow">
-      <button class="btn" id="btnRepair">修复乱码角色</button>
-      <button class="btn danger" id="btnClearAll">清空全部角色与对话</button>
-    </div>
-    <p class="hint">纯静态：角色、对话、记忆、API Key 都只存在这台设备的浏览器里。</p>
-  
     </div>
   </div>
+
   <nav class="bottom-nav">
-    <button class="nav-item on" data-pane="chars">
-      <span class="nav-ico">◈</span><span class="nav-txt">角色卡</span>
-    </button>
-    <button class="nav-item" data-pane="chats">
-      <span class="nav-ico">☰</span><span class="nav-txt">历史聊天</span>
-    </button>
-    <button class="nav-item" data-pane="settings">
-      <span class="nav-ico">⚙</span><span class="nav-txt">设置</span>
-    </button>
+    <button class="nav-item on" data-pane="chars"><span class="nav-ico">◈</span><span class="nav-txt">角色</span></button>
+    <button class="nav-item" data-pane="chats"><span class="nav-ico">☰</span><span class="nav-txt">回忆</span></button>
+    <button class="nav-add" id="btnAdd" title="新建角色">＋</button>
+    <button class="nav-item" data-pane="connect"><span class="nav-ico">⇄</span><span class="nav-txt">连接</span></button>
+    <button class="nav-item" data-pane="settings"><span class="nav-ico">⚙</span><span class="nav-txt">设置</span></button>
   </nav>
-  <button class="fab" id="btnAdd">＋ 新角色</button>
 </section>
 
 <!-- ============ 聊天 ============ -->
@@ -776,15 +850,20 @@
     }
   }
 
-  /* ---------- 分页 ---------- */
+  /* ---------- 分页 / 筛选 / 列表 ---------- */
+  const ui = { pane: 'chars', pageC: 1, pageM: 1, sizeC: 12, sizeM: 10, qC: '', qM: '', filter: 'all' };
+
   function switchPane(name) {
+    ui.pane = name;
     $$('.nav-item').forEach(t => t.classList.toggle('on', t.dataset.pane === name));
-    $('#paneChars').style.display = name === 'chars' ? '' : 'none';
-    $('#paneChats').style.display = name === 'chats' ? '' : 'none';
-    $('#paneSettings').style.display = name === 'settings' ? '' : 'none';
-    $('#btnAdd').style.display = name === 'chars' ? '' : 'none';
+    ['chars', 'chats', 'connect', 'settings'].forEach(k => {
+      const el = document.getElementById('pane' + k.charAt(0).toUpperCase() + k.slice(1));
+      if (el) el.style.display = k === name ? '' : 'none';
+    });
+    const add = $('#btnAdd');
+    if (add) add.style.display = (name === 'chars' || name === 'chats') ? '' : 'none';
     if (name === 'chats') renderChatList();
-    if (name === 'settings') renderSettings();
+    if (name === 'settings' || name === 'connect') renderSettings();
     const lib = $('.lib'); if (lib) lib.scrollTop = 0;
   }
   $$('.nav-item').forEach(t => { t.onclick = () => switchPane(t.dataset.pane); });
@@ -797,28 +876,100 @@
     const hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
     if (same) return hm;
     if (y) return '昨天 ' + hm;
-    return (d.getMonth() + 1) + '/' + d.getDate();
+    return (d.getMonth() + 1) + '-' + String(d.getDate()).padStart(2, '0');
   }
   const preview = t => String(t || '').replace(/[*`#]/g, '').replace(/\s+/g, ' ').trim().slice(0, 46);
 
+  function renderPager(sel, page, total, go) {
+    const el = $(sel); if (!el) return;
+    el.innerHTML = '';
+    const mk = (label, n, dis) => {
+      const btn = document.createElement('button');
+      btn.textContent = label; btn.disabled = dis;
+      btn.onclick = () => go(n);
+      return btn;
+    };
+    el.append(mk('«', 1, page <= 1), mk('‹', page - 1, page <= 1));
+    const idx = document.createElement('span');
+    idx.className = 'pg-idx'; idx.innerHTML = '<b>' + page + '</b> / ' + total;
+    el.append(idx, mk('›', page + 1, page >= total), mk('»', total, page >= total));
+  }
+
+  function charTags(c) {
+    const raw = String(c.pers || c.tag || '').split(/[，,、；;\s]+/).filter(Boolean);
+    const out = [];
+    for (const t of raw) {
+      const v = t.replace(/[。.!！?？]$/, '').slice(0, 6);
+      if (v && !out.includes(v)) out.push(v);
+      if (out.length >= 3) break;
+    }
+    if (!out.length && c.scene) out.push(String(c.scene).slice(0, 6));
+    return out;
+  }
+
+  function filteredChars() {
+    let list = chars.slice();
+    const q = ui.qC.trim().toLowerCase();
+    if (q) list = list.filter(c => (c.name + ' ' + (c.tag || '') + ' ' + (c.desc || '') + ' ' + (c.pers || '')).toLowerCase().includes(q));
+    if (ui.filter === 'chat') list = list.filter(c => (chats[c.id] || []).length);
+    if (ui.filter === 'nochat') list = list.filter(c => !(chats[c.id] || []).length);
+    return list;
+  }
+
+  function renderLibrary() {
+    const list = filteredChars();
+    const total = Math.max(1, Math.ceil(list.length / ui.sizeC));
+    ui.pageC = Math.min(Math.max(1, ui.pageC), total);
+    const page = list.slice((ui.pageC - 1) * ui.sizeC, ui.pageC * ui.sizeC);
+    const box = $('#cards'); box.innerHTML = '';
+    $('#emptyLib').style.display = list.length ? 'none' : 'block';
+    page.forEach((c, i) => {
+      const tags = charTags(c);
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.style.animationDelay = (i * 40) + 'ms';
+      el.innerHTML =
+        '<div class="thumb">' + (c.avatar ? '<img alt="">' : '<span class="ph">✦</span>') + '</div>' +
+        '<div class="cbody">' +
+          '<div class="badges"><i>人设</i><i class="b2">开场</i></div>' +
+          '<div class="cname">' + esc(c.name) + '</div>' +
+          (tags.length ? '<div class="ctags">' + tags.map(t => '<u>' + esc(t) + '</u>').join('') + '</div>' : '') +
+        '</div>';
+      if (c.avatar) el.querySelector('img').src = c.avatar;
+      el.onclick = () => openChat(c.id);
+      let timer = 0;
+      el.addEventListener('touchstart', () => { timer = setTimeout(() => charMenu(c.id), 520); }, { passive: true });
+      el.addEventListener('touchend', () => clearTimeout(timer));
+      el.addEventListener('touchmove', () => clearTimeout(timer));
+      el.oncontextmenu = e => { e.preventDefault(); charMenu(c.id); };
+      box.append(el);
+    });
+    renderPager('#pagerChars', ui.pageC, total, n => { ui.pageC = n; renderLibrary(); });
+  }
+
+  function rowData() {
+    return chars
+      .map(c => ({ c, list: (chats[c.id] || []).filter(x => x.role !== 'error') }))
+      .filter(r => r.list.length)
+      .map(r => ({ c: r.c, list: r.list, last: r.list[r.list.length - 1], ts: r.list[r.list.length - 1].ts }))
+      .sort((x, y) => y.ts - x.ts);
+  }
+
   function renderChatList() {
     const box = $('#chatList'); if (!box) return;
-    const rows = chars
-      .map(c => {
-        const list = (chats[c.id] || []).filter(x => x.role !== 'error');
-        const last = list[list.length - 1];
-        return { c, list, last, ts: last ? last.ts : 0 };
-      })
-      .filter(r => r.list.length)
-      .sort((a, b) => b.ts - a.ts);
+    const q = ui.qM.trim().toLowerCase();
+    let rows = rowData();
+    if (q) rows = rows.filter(r => ((r.c.name || '') + ' ' + (r.last.content || '')).toLowerCase().includes(q));
     $('#emptyChats').style.display = rows.length ? 'none' : 'block';
+    const total = Math.max(1, Math.ceil(rows.length / ui.sizeM));
+    ui.pageM = Math.min(Math.max(1, ui.pageM), total);
+    const page = rows.slice((ui.pageM - 1) * ui.sizeM, ui.pageM * ui.sizeM);
     box.innerHTML = '';
-    rows.forEach((r, i) => {
+    page.forEach((r, i) => {
       const el = document.createElement('div');
       el.className = 'chat-item';
       el.style.animationDelay = Math.min(i * 40, 240) + 'ms';
-      const av = r.c.avatar ? '<img alt="">' : '<div class="ph">✦</div>';
-      el.innerHTML = av +
+      el.innerHTML = (r.c.avatar ? '<img alt="">' : '<div class="ph">✦</div>') +
         '<div class="ci-main">' +
           '<div class="ci-top"><b>' + esc(r.c.name) + '</b><span>' + fmtTime(r.ts) + '</span></div>' +
           '<div class="ci-msg">' + esc(preview(r.last.content)) + '<span class="ci-badge">' + r.list.length + ' 条</span></div>' +
@@ -832,46 +983,15 @@
       el.oncontextmenu = e => { e.preventDefault(); historyMenu(r.c.id); };
       box.append(el);
     });
+    renderPager('#pagerChats', ui.pageM, total, n => { ui.pageM = n; renderChatList(); });
   }
 
   function historyMenu(id) {
     const c = chars.find(x => x.id === id); if (!c) return;
-    openSheet('「' + c.name + '」的对话', [
+    openSheet('「' + c.name + '」的回忆', [
       { label: '继续聊', run: () => openChat(id) },
       { label: '查看长期记忆', run: () => memorySheet(id) },
-      { label: '清空这段对话', danger: true, run: () => { if (confirm('清空和「' + c.name + '」的全部对话？前情记忆也会清空。')) { delete chats[id]; delete mem[id]; save(LS.chats, chats); save(LS.mem, mem); renderChatList(); toast('已清空'); } } }
-    ]);
-  }
-
-  /* ---------- 角色库 ---------- */
-  function renderLibrary() {
-    const box = $('#cards');
-    $('#emptyLib').style.display = chars.length ? 'none' : 'block';
-    box.innerHTML = '';
-    chars.forEach((c, i) => {
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.style.animationDelay = (i * 45) + 'ms';
-      el.innerHTML = '<div class="thumb">' + (c.avatar ? '<img alt="">' : '<span class="ph">✦</span>') + '</div>' +
-        '<div class="info"><div class="name">' + esc(c.name) + '</div><div class="tag">' + esc(c.tag || '') + '</div></div>';
-      if (c.avatar) el.querySelector('img').src = c.avatar;
-      el.onclick = () => openChat(c.id);
-      el.oncontextmenu = e => { e.preventDefault(); charMenu(c.id); };
-      let timer = 0;
-      el.addEventListener('touchstart', () => { timer = setTimeout(() => charMenu(c.id), 520); }, { passive: true });
-      el.addEventListener('touchend', () => clearTimeout(timer));
-      el.addEventListener('touchmove', () => clearTimeout(timer));
-      box.append(el);
-    });
-  }
-
-  function charMenu(id) {
-    const c = chars.find(x => x.id === id); if (!c) return;
-    openSheet('「' + c.name + '」', [
-      { label: '编辑角色', run: () => openEditor(id) },
-      { label: '查看长期记忆', run: () => memorySheet(id) },
-      { label: '重新开始', run: () => { if (confirm('清空和「' + c.name + '」的对话与前情？')) { delete chats[id]; delete mem[id]; save(LS.chats, chats); save(LS.mem, mem); toast('已重新开始'); } } },
-      { label: '删除角色', danger: true, run: () => { if (confirm('删除「' + c.name + '」？')) { chars = chars.filter(x => x.id !== id); delete chats[id]; delete mem[id]; save(LS.chars, chars); save(LS.chats, chats); save(LS.mem, mem); renderLibrary(); toast('已删除'); } } }
+      { label: '清空这段回忆', danger: true, run: () => { if (confirm('清空和「' + c.name + '」的全部对话？前情记忆也会清空。')) { delete chats[id]; delete mem[id]; save(LS.chats, chats); save(LS.mem, mem); renderChatList(); toast('已清空'); } } }
     ]);
   }
 
@@ -1219,6 +1339,22 @@
   }
 
   /* ---------- 绑定 ---------- */
+  $('#sizeChars').onchange = e => { ui.sizeC = Number(e.target.value) || 12; ui.pageC = 1; renderLibrary(); };
+  $('#qChars').oninput = e => { ui.qC = e.target.value; ui.pageC = 1; renderLibrary(); };
+  $('#btnFilter').onclick = () => {
+    const order = ['all', 'chat', 'nochat'];
+    ui.filter = order[(order.indexOf(ui.filter) + 1) % order.length];
+    const label = { all: '全部', chat: '有对话', nochat: '无对话' }[ui.filter];
+    $('#btnFilter').innerHTML = '<span>♡</span> <em>' + label + '</em>';
+    ui.pageC = 1; renderLibrary();
+  };
+  $('#sizeChats').onchange = e => { ui.sizeM = Number(e.target.value) || 10; ui.pageM = 1; renderChatList(); };
+  $('#qChats').oninput = e => { ui.qM = e.target.value; ui.pageM = 1; renderChatList(); };
+  $('#btnPurge').onclick = () => {
+    if (!confirm('清空全部对话与记忆？角色卡会保留。')) return;
+    chats = {}; mem = {}; save(LS.chats, chats); save(LS.mem, mem); renderChatList(); toast('已清空全部回忆');
+  };
+  $('#btnSaveCfg2').onclick = () => { $('#btnSaveCfg').click(); };
   $('#btnAdd').onclick = () => openSheet('新建', [
     { label: '现场捏一个角色', sub: '打开编辑器，从零开始', run: () => openEditor(null) },
     { label: '导入角色卡文件', sub: 'JSON / PNG（Tavern · SillyTavern · Chub）', run: () => importCard() }
@@ -1234,7 +1370,6 @@
     inp.click();
   }
   $('#btnTheme').onclick = () => { const o = ['midnight', 'sakura', 'noir', 'endfield', 'xianxia']; applyTheme(o[(o.indexOf(theme) + 1) % o.length]); toast({ midnight: '午夜紫', sakura: '樱花', noir: '黑金', endfield: '终末地', xianxia: '修仙' }[theme]); };
-  $('#btnSettings').onclick = () => { show('s-lib'); switchPane('settings'); };
     $('#btnBack').onclick = () => show('s-lib');
   $('#btnEditBack').onclick = () => show('s-lib');
   $('#send').onclick = send;
