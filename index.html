@@ -144,6 +144,20 @@
     backdrop-filter:var(--blur);letter-spacing:.06em;
   }
   .tab.on{color:var(--text);border-color:var(--line-strong);background:var(--panel);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .bottom-nav{
+    position:relative;z-index:4;display:flex;align-items:stretch;
+    border-top:1px solid var(--line);background:color-mix(in srgb, var(--panel-solid) 82%, transparent);
+    backdrop-filter:var(--blur);padding:6px 10px calc(6px + env(safe-area-inset-bottom));
+  }
+  .nav-item{
+    flex:1;border:0;background:none;color:var(--muted);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 0 5px;border-radius:12px;transition:.16s;
+  }
+  .nav-item .nav-ico{font-size:17px;line-height:1}
+  .nav-item .nav-txt{font-size:10.5px;letter-spacing:.08em}
+  .nav-item.on{color:var(--text);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+  .nav-item.on .nav-ico{color:var(--accent);text-shadow:0 0 14px var(--glow)}
+  .settings-body{display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
   .chat-list{display:flex;flex-direction:column;gap:10px}
   .chat-item{
     display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;cursor:pointer;
@@ -159,7 +173,7 @@
   .chat-item .ci-top span{margin-left:auto;font-size:10.5px;color:var(--muted);flex:0 0 auto;font-family:ui-monospace,monospace}
   .chat-item .ci-msg{font-size:12.5px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
   .chat-item .ci-badge{font-size:10px;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin-left:6px}
-  .lib{flex:1;overflow-y:auto;padding:4px 18px calc(104px + env(safe-area-inset-bottom));position:relative;z-index:1;-webkit-overflow-scrolling:touch}
+  .lib{flex:1;overflow-y:auto;padding:4px 18px calc(84px + env(safe-area-inset-bottom));position:relative;z-index:1;-webkit-overflow-scrolling:touch}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .card{
     position:relative;border-radius:22px;overflow:hidden;border:1px solid var(--line);
@@ -306,6 +320,19 @@
   .greet-item:active{transform:scale(.99);border-color:var(--line-strong)}
   .greet-item small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
   .mem-box{width:100%;min-height:160px;border-radius:15px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg1) 46%,transparent);color:var(--text);padding:12px;font:inherit;line-height:1.65;resize:vertical}
+  /* 底部导航：终末地 */
+  html[data-theme="endfield"] .bottom-nav{background:var(--panel-solid);border-top:2px solid var(--line-strong)}
+  html[data-theme="endfield"] .nav-item{border-radius:2px}
+  html[data-theme="endfield"] .nav-item.on{background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:inset 0 -2px 0 var(--accent)}
+  html[data-theme="endfield"] .nav-item .nav-ico{font-family:ui-monospace,monospace}
+  html[data-theme="endfield"] .nav-item .nav-txt{font-family:ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
+  /* 底部导航：修仙 */
+  html[data-theme="xianxia"] .bottom-nav{background:color-mix(in srgb,var(--panel-solid) 90%,transparent)}
+  html[data-theme="xianxia"] .nav-item.on{background:transparent}
+  html[data-theme="xianxia"] .nav-item.on .nav-ico{color:var(--accent)}
+  html[data-theme="xianxia"] .nav-item.on .nav-txt{color:var(--accent);letter-spacing:.18em}
+  html[data-theme="xianxia"] .nav-item .nav-txt{letter-spacing:.14em}
+
   /* ================= 修仙 Xianxia 风格覆盖 ================= */
   html[data-theme="xianxia"] body{
     background:
@@ -491,14 +518,10 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v9</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v10</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
     <button class="iconbtn" id="btnSettings" title="设置">⚙</button>
-  </div>
-  <div class="tabs">
-    <button class="tab on" data-pane="chars">角色卡</button>
-    <button class="tab" data-pane="chats">历史对话</button>
   </div>
   <div class="lib">
     <div id="paneChars">
@@ -518,7 +541,67 @@
         去 <b>角色卡</b> 挑一个开聊吧。
       </div>
     </div>
+    <div id="paneSettings" style="display:none">
+<div class="settings-body">
+    <div class="sec-title">模型接口</div>
+    <div class="field"><label>Base URL</label><input id="cfgBase" placeholder="https://api.deepseek.com"></div>
+    <div class="field"><label>API Key（只存这台设备）</label><input id="cfgKey" type="password" placeholder="sk-…" autocomplete="off"></div>
+    <div class="field">
+      <label>模型</label>
+      <div style="display:flex;gap:8px">
+        <input id="cfgModel" placeholder="deepseek-chat" style="flex:1">
+        <button class="btn" id="btnFetchModels" style="white-space:nowrap;padding:11px 14px">拉取列表</button>
+      </div>
+      <select id="cfgModelSelect" style="margin-top:8px;display:none"></select>
+    </div>
+    <div class="field"><label>温度（0.6 稳 / 1.0 野）</label><input id="cfgTemp" type="number" min="0" max="2" step="0.05"></div>
+    <div class="btnrow"><button class="btn primary" id="btnSaveCfg">保存</button><button class="btn" id="btnTestCfg">测试连接</button></div>
+
+    <div class="divider"></div>
+    <div class="sec-title">长期记忆</div>
+    <div class="field"><label>自动整理前情</label>
+      <select id="cfgAutoMem"><option value="1">开（每段对话自动摘要一次）</option><option value="0">关（只能手动整理）</option></select>
+    </div>
+    <p class="hint">开启后，旧剧情会被压成一段「前情提要」长期保留，不会因为消息太多而被忘掉。可以在聊天菜单里手动查看和编辑。</p>
+
+    <div class="divider"></div>
+    <div class="sec-title">外观</div>
+    <div class="field"><label>主题</label>
+      <select id="cfgTheme">
+        <option value="midnight">午夜紫（暗）</option>
+        <option value="sakura">樱花（亮）</option>
+        <option value="noir">黑金（暗）</option>
+        <option value="endfield">终末地（浅 · 工业）</option>
+        <option value="xianxia">修仙（浅 · 宣纸）</option>
+      </select>
+    </div>
+
+    <div class="divider"></div>
+    <div class="sec-title">数据</div>
+    <div class="btnrow">
+      <button class="btn" id="btnExportAll">导出全部</button>
+      <button class="btn" id="btnImportAll">导入备份</button>
+      <input type="file" id="importAllFile" accept="application/json,.json" hidden>
+    </div>
+    <div class="btnrow">
+      <button class="btn" id="btnRepair">修复乱码角色</button>
+      <button class="btn danger" id="btnClearAll">清空全部角色与对话</button>
+    </div>
+    <p class="hint">纯静态：角色、对话、记忆、API Key 都只存在这台设备的浏览器里。</p>
+  
+    </div>
   </div>
+  <nav class="bottom-nav">
+    <button class="nav-item on" data-pane="chars">
+      <span class="nav-ico">◈</span><span class="nav-txt">角色卡</span>
+    </button>
+    <button class="nav-item" data-pane="chats">
+      <span class="nav-ico">☰</span><span class="nav-txt">历史聊天</span>
+    </button>
+    <button class="nav-item" data-pane="settings">
+      <span class="nav-ico">⚙</span><span class="nav-txt">设置</span>
+    </button>
+  </nav>
   <button class="fab" id="btnAdd">＋ 新角色</button>
 </section>
 
@@ -570,59 +653,7 @@
 </section>
 
 <!-- ============ 设置 ============ -->
-<section class="screen" id="s-set">
-  <div class="chat-head" style="background:transparent">
-    <button class="iconbtn" id="btnSetBack">‹</button>
-    <div class="who"><b>设置</b><span>接口 · 主题 · 数据</span></div>
-  </div>
-  <div class="form">
-    <div class="sec-title">模型接口</div>
-    <div class="field"><label>Base URL</label><input id="cfgBase" placeholder="https://api.deepseek.com"></div>
-    <div class="field"><label>API Key（只存这台设备）</label><input id="cfgKey" type="password" placeholder="sk-…" autocomplete="off"></div>
-    <div class="field">
-      <label>模型</label>
-      <div style="display:flex;gap:8px">
-        <input id="cfgModel" placeholder="deepseek-chat" style="flex:1">
-        <button class="btn" id="btnFetchModels" style="white-space:nowrap;padding:11px 14px">拉取列表</button>
-      </div>
-      <select id="cfgModelSelect" style="margin-top:8px;display:none"></select>
-    </div>
-    <div class="field"><label>温度（0.6 稳 / 1.0 野）</label><input id="cfgTemp" type="number" min="0" max="2" step="0.05"></div>
-    <div class="btnrow"><button class="btn primary" id="btnSaveCfg">保存</button><button class="btn" id="btnTestCfg">测试连接</button></div>
 
-    <div class="divider"></div>
-    <div class="sec-title">长期记忆</div>
-    <div class="field"><label>自动整理前情</label>
-      <select id="cfgAutoMem"><option value="1">开（每段对话自动摘要一次）</option><option value="0">关（只能手动整理）</option></select>
-    </div>
-    <p class="hint">开启后，旧剧情会被压成一段「前情提要」长期保留，不会因为消息太多而被忘掉。可以在聊天菜单里手动查看和编辑。</p>
-
-    <div class="divider"></div>
-    <div class="sec-title">外观</div>
-    <div class="field"><label>主题</label>
-      <select id="cfgTheme">
-        <option value="midnight">午夜紫（暗）</option>
-        <option value="sakura">樱花（亮）</option>
-        <option value="noir">黑金（暗）</option>
-        <option value="endfield">终末地（浅 · 工业）</option>
-        <option value="xianxia">修仙（浅 · 宣纸）</option>
-      </select>
-    </div>
-
-    <div class="divider"></div>
-    <div class="sec-title">数据</div>
-    <div class="btnrow">
-      <button class="btn" id="btnExportAll">导出全部</button>
-      <button class="btn" id="btnImportAll">导入备份</button>
-      <input type="file" id="importAllFile" accept="application/json,.json" hidden>
-    </div>
-    <div class="btnrow">
-      <button class="btn" id="btnRepair">修复乱码角色</button>
-      <button class="btn danger" id="btnClearAll">清空全部角色与对话</button>
-    </div>
-    <p class="hint">纯静态：角色、对话、记忆、API Key 都只存在这台设备的浏览器里。</p>
-  </div>
-</section>
 
 <div class="sheet-mask" id="sheetMask"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
@@ -663,7 +694,7 @@
 
   let toastTimer = 0;
   function toast(m) { const el = $('#toast'); el.textContent = m; el.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('on'), 2100); }
-  function show(id) { $$('.screen').forEach(s => s.classList.toggle('on', s.id === id)); if (id === 's-lib') renderChatList(); }
+  function show(id) { $$('.screen').forEach(s => s.classList.toggle('on', s.id === id)); if (id === 's-lib') { renderChatList(); renderSettings(); } }
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const md = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*\n]+)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
   const uid = () => 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -747,12 +778,16 @@
 
   /* ---------- 分页 ---------- */
   function switchPane(name) {
-    $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.pane === name));
+    $$('.nav-item').forEach(t => t.classList.toggle('on', t.dataset.pane === name));
     $('#paneChars').style.display = name === 'chars' ? '' : 'none';
     $('#paneChats').style.display = name === 'chats' ? '' : 'none';
+    $('#paneSettings').style.display = name === 'settings' ? '' : 'none';
+    $('#btnAdd').style.display = name === 'chars' ? '' : 'none';
     if (name === 'chats') renderChatList();
+    if (name === 'settings') renderSettings();
+    const lib = $('.lib'); if (lib) lib.scrollTop = 0;
   }
-  $$('.tab').forEach(t => { t.onclick = () => switchPane(t.dataset.pane); });
+  $$('.nav-item').forEach(t => { t.onclick = () => switchPane(t.dataset.pane); });
 
   function fmtTime(ts) {
     if (!ts) return '';
@@ -1199,9 +1234,8 @@
     inp.click();
   }
   $('#btnTheme').onclick = () => { const o = ['midnight', 'sakura', 'noir', 'endfield', 'xianxia']; applyTheme(o[(o.indexOf(theme) + 1) % o.length]); toast({ midnight: '午夜紫', sakura: '樱花', noir: '黑金', endfield: '终末地', xianxia: '修仙' }[theme]); };
-  $('#btnSettings').onclick = () => { renderSettings(); show('s-set'); };
-  $('#btnSetBack').onclick = () => show('s-lib');
-  $('#btnBack').onclick = () => show('s-lib');
+  $('#btnSettings').onclick = () => { show('s-lib'); switchPane('settings'); };
+    $('#btnBack').onclick = () => show('s-lib');
   $('#btnEditBack').onclick = () => show('s-lib');
   $('#send').onclick = send;
   $('#input').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); send(); } });
