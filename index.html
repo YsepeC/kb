@@ -566,7 +566,7 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v11</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v12</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
   </div>
@@ -641,6 +641,26 @@
           <select id="cfgAutoMem"><option value="1">开（每段对话自动摘要一次）</option><option value="0">关（只能手动整理）</option></select>
         </div>
         <p class="hint">开启后，旧剧情会被压成一段「前情提要」长期保留，不会因为消息太多而被忘掉。</p>
+
+        <div class="divider"></div>
+        <div class="divider"></div>
+        <div class="sec-title">世界书</div>
+        <div class="field">
+          <label>全局设定（所有角色共用）</label>
+          <textarea id="cfgWorld" placeholder="例如：本世界为九州，修士分炼气筑基金丹元婴四境；语言偏古雅，称呼用“道友”。"></textarea>
+        </div>
+        <p class="hint">会注入每轮对话最前面，用来固定世界观、专有名词、禁忌规则。单个角色也可以在自己编辑页里写世界设定，两者会叠加。</p>
+
+        <div class="divider"></div>
+        <div class="sec-title">正则</div>
+        <div class="field">
+          <label>输出替换规则（每行一条）</label>
+          <textarea id="cfgRegex" placeholder="例如：
+(As an AI[^。]*。) =>
+【旁白】… =>
+/\*\*(.+?)\*\*/g => *$1*"></textarea>
+        </div>
+        <p class="hint">格式：<code>匹配 => 替换</code>，按顺序执行；写成 <code>/pattern/flags => 替换</code> 可用正则，否则按纯文本替换。</p>
 
         <div class="divider"></div>
         <div class="sec-title">外观</div>
@@ -721,6 +741,7 @@
     <div class="field"><label>场景</label><textarea id="fScene" placeholder="故事发生在哪里、此刻发生了什么"></textarea></div>
     <div class="field"><label>开场白</label><textarea id="fGreet" placeholder="角色的第一句话（可以带动作）"></textarea></div>
     <div class="field"><label>示例对话（可选）</label><textarea id="fEx" placeholder="&lt;START&gt;&#10;角色：…&#10;你：…"></textarea></div>
+    <div class="field"><label>角色专属世界书（可选）</label><textarea id="fWorld" placeholder="只对这个世界/这个角色生效的设定，会叠加在全局世界书之后"></textarea></div>
     <div class="field"><label>额外系统提示（可选）</label><textarea id="fSys" placeholder="例如：不要替用户行动、保持短句"></textarea></div>
     <p class="hint">描述、性格、场景、示例对话都会作为角色的「记忆」每轮带上。示例对话最能稳定语气。</p>
   </div>
@@ -739,7 +760,7 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const LS = { cfg: 'lumen6.cfg', chars: 'lumen6.chars', chats: 'lumen6.chats', mem: 'lumen6.mem', theme: 'lumen6.theme' };
   const LEGACY = ['lumen5','lumen4','lumen3'];
-  const DEFAULT_CFG = { base: 'https://api.deepseek.com', model: 'deepseek-chat', key: '', temp: 0.88, autoMem: true };
+  const DEFAULT_CFG = { base: 'https://api.deepseek.com', model: 'deepseek-chat', key: '', temp: 0.88, autoMem: true, world: '', regex: '' };
   const HISTORY = 12, FOLD_AT = 12;
 
   const load = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? JSON.parse(JSON.stringify(d)) : JSON.parse(v); } catch { return JSON.parse(JSON.stringify(d)); } };
@@ -931,7 +952,11 @@
       el.innerHTML =
         '<div class="thumb">' + (c.avatar ? '<img alt="">' : '<span class="ph">✦</span>') + '</div>' +
         '<div class="cbody">' +
-          '<div class="badges"><i>人设</i><i class="b2">开场</i></div>' +
+          '<div class="badges">' +
+            ((cfg.world && cfg.world.trim()) || (c.world && c.world.trim()) ? '<i>世界书</i>' : '') +
+            (regexRules().length ? '<i class="b2">正则</i>' : '') +
+            (!((cfg.world && cfg.world.trim()) || (c.world && c.world.trim())) && !regexRules().length ? '<i>人设</i><i class="b2">开场</i>' : '') +
+          '</div>' +
           '<div class="cname">' + esc(c.name) + '</div>' +
           (tags.length ? '<div class="ctags">' + tags.map(t => '<u>' + esc(t) + '</u>').join('') + '</div>' : '') +
         '</div>';
@@ -1057,10 +1082,29 @@
     });
   }
 
+  function regexRules() {
+    return String(cfg.regex || '').split('\n').map(l => l.trim()).filter(l => l && l.includes('=>')).map(line => {
+      const i = line.indexOf('=>');
+      const pat = line.slice(0, i).trim(), rep = line.slice(i + 2).trim();
+      const m = pat.match(/^\/(.*)\/([gimsuy]*)$/);
+      if (m) { try { return { re: new RegExp(m[1], m[2].includes('g') ? m[2] : m[2] + 'g'), rep }; } catch { return null; } }
+      return { lit: pat, rep };
+    }).filter(Boolean);
+  }
+  function applyRegex(text) {
+    let out = String(text ?? '');
+    for (const r of regexRules()) {
+      try { out = r.re ? out.replace(r.re, r.rep) : out.split(r.lit).join(r.rep); } catch {}
+    }
+    return out;
+  }
+
   function buildMessages() {
     const c = currentChar(); const list = currentChat(); const m = currentMem();
     const p = [];
     p.push('你正在进行角色扮演。你就是下面的角色：第一人称说话，不跳出角色，不解释自己是 AI，不替用户写他的行动和心理。');
+    if (cfg.world && cfg.world.trim()) p.push('# 世界设定\n' + cfg.world.trim());
+    if (c.world && c.world.trim()) p.push('# 本世界补充设定\n' + c.world.trim());
     p.push('# 角色\n名字：' + c.name);
     if (c.desc) p.push('描述：\n' + c.desc);
     if (c.pers) p.push('性格：\n' + c.pers);
@@ -1075,11 +1119,38 @@
     return msgs;
   }
 
-  const apiUrl = path => (cfg.base || DEFAULT_CFG.base).replace(/\/+$/, '') + path;
+  function baseVariants() {
+    let b = String(cfg.base || DEFAULT_CFG.base).trim().replace(/\/+$/, '');
+    b = b.replace(/\/(chat\/completions|completions|models)$/i, '');
+    const out = [];
+    if (/\/v\d+[a-z]*$/i.test(b)) out.push(b);
+    else { out.push(b + '/v1'); out.push(b); }
+    return [...new Set(out)];
+  }
+  let goodBase = '';
+  function apiCandidates(path) {
+    const list = baseVariants().map(b => b + path);
+    if (goodBase) { const g = goodBase.replace(/\/+$/, '') + path; return [g, ...list.filter(u => u !== g)]; }
+    return list;
+  }
+  async function apiFetch(path, init = {}) {
+    let last = null;
+    for (const url of apiCandidates(path)) {
+      let res;
+      try { res = await fetch(url, init); } catch (e) { last = { url, err: e }; continue; }
+      const ct = res.headers.get('content-type') || '';
+      const isHtml = ct.includes('text/html');
+      if (res.ok && !isHtml) { goodBase = url.slice(0, url.length - path.length); return res; }
+      last = { url, status: res.status, isHtml };
+      if (res.status !== 404 && !isHtml) return res;
+    }
+    const hint = last?.isHtml ? '这个地址返回的是网页，不是 API（通常需要以 /v1 结尾）' : (last?.status ? 'HTTP ' + last.status : (last?.err?.message || '网络错误'));
+    throw new Error(hint);
+  }
 
   async function callModel(messages, opts = {}) {
     if (!cfg.key) throw new Error('还没填 API Key，去「设置」里填一个');
-    const res = await fetch(apiUrl('/chat/completions'), {
+    const res = await apiFetch('/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + cfg.key },
       body: JSON.stringify({ model: cfg.model || DEFAULT_CFG.model, messages, temperature: opts.temp ?? cfg.temp ?? 0.88, max_tokens: opts.maxTokens ?? 900, stream: !!opts.stream })
@@ -1125,6 +1196,7 @@
         }
       }
       if (!acc) acc = '（没有收到内容）';
+      acc = applyRegex(acc);
       row.remove();
       list.push({ role: 'assistant', content: acc, ts: Date.now() });
       save(LS.chats, chats); renderChat(); renderChatList();
@@ -1203,6 +1275,7 @@
       alts: Array.isArray(d.alternate_greetings) ? d.alternate_greetings.filter(x => typeof x === 'string') : [],
       ex: String(d.mes_example || d.example_dialogue || ''),
       sys: String(d.system_prompt || d.post_history_instructions || ''),
+      world: String(d.extensions?.world || d.world || ''),
       createdAt: Date.now()
     };
   }
@@ -1280,6 +1353,7 @@
     $('#fScene').value = c ? (c.scene || '') : '';
     $('#fGreet').value = c ? (c.greet || '') : '';
     $('#fEx').value = c ? (c.ex || '') : '';
+    $('#fWorld').value = c ? (c.world || '') : '';
     $('#fSys').value = c ? (c.sys || '') : '';
     editAvatar = c ? (c.avatar || '') : '';
     syncAvatarPreview();
@@ -1294,7 +1368,7 @@
   function saveChar() {
     const name = $('#fName').value.trim();
     if (!name) return toast('至少给角色起个名字');
-    const data = { name, tag: $('#fTag').value.trim(), avatar: editAvatar, desc: $('#fDesc').value.trim(), pers: $('#fPers').value.trim(), scene: $('#fScene').value.trim(), greet: $('#fGreet').value.trim(), ex: $('#fEx').value.trim(), sys: $('#fSys').value.trim() };
+    const data = { name, tag: $('#fTag').value.trim(), avatar: editAvatar, desc: $('#fDesc').value.trim(), pers: $('#fPers').value.trim(), scene: $('#fScene').value.trim(), greet: $('#fGreet').value.trim(), ex: $('#fEx').value.trim(), sys: $('#fSys').value.trim(), world: $('#fWorld').value.trim() };
     if (editingId) Object.assign(chars.find(x => x.id === editingId), data);
     else chars.unshift(Object.assign({ id: uid(), createdAt: Date.now(), alts: [] }, data));
     save(LS.chars, chars); renderLibrary(); toast('已保存'); show('s-lib');
@@ -1318,13 +1392,14 @@
   /* ---------- settings ---------- */
   function renderSettings() {
     $('#cfgBase').value = cfg.base; $('#cfgModel').value = cfg.model; $('#cfgKey').value = cfg.key;
+    $('#cfgWorld').value = cfg.world || ''; $('#cfgRegex').value = cfg.regex || '';
     $('#cfgTemp').value = cfg.temp; $('#cfgTheme').value = theme; $('#cfgAutoMem').value = cfg.autoMem ? '1' : '0';
   }
   async function fetchModels() {
     $('#btnSaveCfg').click();
     toast('正在拉取模型…');
     try {
-      const res = await fetch(apiUrl('/models'), { headers: { Authorization: 'Bearer ' + cfg.key } });
+      const res = await apiFetch('/models', { headers: { Authorization: 'Bearer ' + cfg.key } });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       const list = (data.data || []).map(m => m.id).filter(Boolean);
@@ -1407,7 +1482,7 @@
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(card, null, 2)], { type: 'application/json' })); a.download = c.name + '.json'; a.click();
   };
   $('#btnSaveCfg').onclick = () => {
-    cfg = { base: $('#cfgBase').value.trim() || DEFAULT_CFG.base, model: $('#cfgModel').value.trim() || DEFAULT_CFG.model, key: $('#cfgKey').value.trim(), temp: Number($('#cfgTemp').value) || 0.88, autoMem: $('#cfgAutoMem').value === '1' };
+    cfg = { base: $('#cfgBase').value.trim() || DEFAULT_CFG.base, model: $('#cfgModel').value.trim() || DEFAULT_CFG.model, key: $('#cfgKey').value.trim(), temp: Number($('#cfgTemp').value) || 0.88, autoMem: $('#cfgAutoMem').value === '1', world: $('#cfgWorld').value, regex: $('#cfgRegex').value };
     save(LS.cfg, cfg); toast('已保存');
   };
   $('#btnFetchModels').onclick = fetchModels;
@@ -1415,7 +1490,7 @@
   $('#cfgAutoMem').onchange = e => { cfg.autoMem = e.target.value === '1'; save(LS.cfg, cfg); };
   $('#btnTestCfg').onclick = async () => {
     $('#btnSaveCfg').click(); toast('测试中…');
-    try { const r = await fetch(apiUrl('/models'), { headers: { Authorization: 'Bearer ' + cfg.key } }); if (!r.ok) throw new Error('HTTP ' + r.status); const d = await r.json(); toast('连接正常（' + ((d.data || []).length) + ' 个模型）'); }
+    try { const r = await apiFetch('/models', { headers: { Authorization: 'Bearer ' + cfg.key } }); if (!r.ok) throw new Error('HTTP ' + r.status); const d = await r.json(); toast('连接正常（' + ((d.data || []).length) + ' 个模型）'); }
     catch (e) { toast('连接失败：' + (e.message || e)); }
   };
   $('#btnExportAll').onclick = () => {
