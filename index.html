@@ -566,7 +566,7 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v12</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v13</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
   </div>
@@ -1203,7 +1203,15 @@
       if (cfg.autoMem) maybeFold();
     } catch (e) {
       row.remove();
-      list.push({ role: 'error', content: '出错了：' + (e.message || e), ts: Date.now() });
+      let msg = String(e.message || e);
+      const perm = msg.match(/无权访问模型([^\s)\"}]+)/) || msg.match(/model[^A-Za-z0-9]*([A-Za-z0-9._:-]+)[^A-Za-z0-9]*not[^.]*permission/i);
+      if (perm) {
+        msg = '这个 API Key 没有「' + perm[1] + '」的权限。去「连接」里点「拉取列表」，选一个你能用的模型。';
+        setTimeout(() => { try { switchPane('connect'); } catch {} }, 200);
+      } else if (msg.length > 220) {
+        msg = msg.slice(0, 220) + '…';
+      }
+      list.push({ role: 'error', content: msg, ts: Date.now() });
       save(LS.chats, chats); renderChat();
     } finally { busy = false; $('#send').disabled = false; }
   }
@@ -1395,6 +1403,24 @@
     $('#cfgWorld').value = cfg.world || ''; $('#cfgRegex').value = cfg.regex || '';
     $('#cfgTemp').value = cfg.temp; $('#cfgTheme').value = theme; $('#cfgAutoMem').value = cfg.autoMem ? '1' : '0';
   }
+  let lastModels = [];
+  function pickModel(list) {
+    const items = list.map(id => {
+      const cur = id === cfg.model;
+      return {
+        label: (cur ? '✓ ' : '') + id,
+        sub: cur ? '当前使用' : '',
+        run: () => {
+          cfg.model = id; save(LS.cfg, cfg);
+          $('#cfgModel').value = id;
+          const sel = $('#cfgModelSelect'); if (sel) sel.value = id;
+          toast('已切换到 ' + id);
+        }
+      };
+    });
+    openSheet('选择模型（共 ' + list.length + ' 个）', items);
+  }
+
   async function fetchModels() {
     $('#btnSaveCfg').click();
     toast('正在拉取模型…');
@@ -1404,12 +1430,15 @@
       const data = await res.json();
       const list = (data.data || []).map(m => m.id).filter(Boolean);
       if (!list.length) throw new Error('返回里没有模型');
+      lastModels = list;
       const sel = $('#cfgModelSelect');
-      sel.innerHTML = list.map(id => '<option value="' + esc(id) + '">' + esc(id) + '</option>').join('');
-      sel.style.display = '';
-      if (list.includes(cfg.model)) sel.value = cfg.model;
-      sel.onchange = () => { $('#cfgModel').value = sel.value; };
-      toast('拉到 ' + list.length + ' 个模型，选一个');
+      if (sel) {
+        sel.innerHTML = list.map(id => '<option value="' + esc(id) + '">' + esc(id) + '</option>').join('');
+        sel.style.display = '';
+      }
+      if (!list.includes(cfg.model)) { cfg.model = list[0]; save(LS.cfg, cfg); $('#cfgModel').value = cfg.model; }
+      toast('拉到 ' + list.length + ' 个模型');
+      setTimeout(() => pickModel(list), 350);
     } catch (e) { toast('拉取失败：' + (e.message || e)); }
   }
 
@@ -1486,6 +1515,10 @@
     save(LS.cfg, cfg); toast('已保存');
   };
   $('#btnFetchModels').onclick = fetchModels;
+  $('#cfgModel').addEventListener('click', () => {
+    if (lastModels.length) pickModel(lastModels);
+    else toast('先点右边「拉取列表」');
+  });
   $('#cfgTheme').onchange = e => applyTheme(e.target.value);
   $('#cfgAutoMem').onchange = e => { cfg.autoMem = e.target.value === '1'; save(LS.cfg, cfg); };
   $('#btnTestCfg').onclick = async () => {
