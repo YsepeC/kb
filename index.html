@@ -41,6 +41,17 @@
     --hero-veil:linear-gradient(to bottom, transparent 6%, var(--bg1) 94%);
     --fx-type:spark;
   }
+  html[data-theme="endfield"]{
+    --bg1:#efebe2; --bg2:#e5e0d5; --bg3:#dcd6c8;
+    --panel:rgba(255,255,255,.8); --panel-solid:#f7f4ec; --card:rgba(255,255,255,.72);
+    --line:rgba(29,31,35,.16); --line-strong:rgba(29,31,35,.4);
+    --text:#1d1f23; --muted:#6b6d74;
+    --accent:#e8542a; --accent2:#2d7d78; --danger:#c9302c;
+    --glow:rgba(232,84,42,.22); --shadow:0 2px 0 rgba(29,31,35,.14);
+    --hero-filter:blur(40px) saturate(85%) brightness(1.06) contrast(.92);
+    --hero-veil:linear-gradient(to bottom, color-mix(in srgb,var(--bg1) 78%, transparent) 2%, var(--bg1) 96%);
+    --fx-type:grid;
+  }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;margin:0}
   body{
@@ -80,6 +91,7 @@
     background:linear-gradient(135deg, color-mix(in srgb,var(--accent) 34%, #fff), color-mix(in srgb,var(--accent2) 62%, #fff));
     animation-name:fall;
   }
+  @keyframes scanline{0%{transform:translateY(-60px);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateY(120px);opacity:0}}
   @keyframes fall{
     0%{transform:translate3d(0,-12vh,0) rotate(0deg);opacity:0}
     12%{opacity:.8}
@@ -251,6 +263,98 @@
   .greet-item:active{transform:scale(.99);border-color:var(--line-strong)}
   .greet-item small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
   .mem-box{width:100%;min-height:160px;border-radius:15px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg1) 46%,transparent);color:var(--text);padding:12px;font:inherit;line-height:1.65;resize:vertical}
+  /* ================= 终末地 Endfield 风格覆盖 ================= */
+  html[data-theme="endfield"] body{
+    background:
+      radial-gradient(900px 600px at 88% -8%, rgba(232,84,42,.10), transparent 62%),
+      radial-gradient(700px 500px at 4% 104%, rgba(45,125,120,.10), transparent 62%),
+      linear-gradient(180deg, var(--bg1), var(--bg2) 60%, var(--bg3));
+    font-family:"DIN Alternate","Roboto Condensed","Noto Sans SC",system-ui,sans-serif;
+  }
+  html[data-theme="endfield"] body::after{background:radial-gradient(130% 100% at 50% 40%, transparent 62%, rgba(29,31,35,.10) 100%);opacity:1;mix-blend-mode:multiply}
+  html[data-theme="endfield"] .grid-layer{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(29,31,35,.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,31,35,.055) 1px, transparent 1px);
+    background-size:30px 30px;mask-image:radial-gradient(120% 90% at 50% 30%, #000 40%, transparent 92%)}
+  html[data-theme="endfield"] .aurora{opacity:.18}
+  html[data-theme="endfield"] .fx i{display:none}
+
+  /* 文本层级 */
+  html[data-theme="endfield"] .brand{font-family:inherit;font-size:23px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+  html[data-theme="endfield"] .brand em{background:none;-webkit-text-fill-color:var(--accent);color:var(--accent)}
+  html[data-theme="endfield"] .brand small{letter-spacing:.34em;color:var(--muted);font-size:9.5px;font-weight:700}
+  html[data-theme="endfield"] .topbar::before{content:"";position:absolute;left:0;top:calc(26px + env(safe-area-inset-top));width:3px;height:34px;background:var(--accent)}
+  html[data-theme="endfield"] .topbar{position:relative;padding-left:22px}
+  html[data-theme="endfield"] .iconbtn{border-radius:4px;border:1px solid var(--line-strong);background:var(--panel-solid);box-shadow:2px 2px 0 rgba(29,31,35,.12)}
+  html[data-theme="endfield"] .iconbtn:active{box-shadow:none;transform:translate(1px,1px)}
+
+  /* 卡片：编号 + 角标 + 硬投影 */
+  html[data-theme="endfield"] .cards{counter-reset:card;gap:12px}
+  html[data-theme="endfield"] .card{
+    border-radius:4px;border:1px solid var(--line-strong);background:var(--panel-solid);
+    box-shadow:3px 3px 0 rgba(29,31,35,.16);counter-increment:card;
+  }
+  html[data-theme="endfield"] .card::before{
+    content:counter(card,decimal-leading-zero);position:absolute;z-index:3;top:7px;left:7px;
+    font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;
+    color:#fff;background:var(--accent);padding:4px 5px;
+  }
+  html[data-theme="endfield"] .card::after{
+    content:"";position:absolute;inset:7px;z-index:3;pointer-events:none;
+    background:
+      linear-gradient(var(--accent),var(--accent)) left top/10px 2px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) left top/2px 10px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) right bottom/10px 2px no-repeat,
+      linear-gradient(var(--accent),var(--accent)) right bottom/2px 10px no-repeat;
+  }
+  html[data-theme="endfield"] .card .thumb{filter:saturate(.92) contrast(1.03)}
+  html[data-theme="endfield"] .card .info{background:linear-gradient(transparent, rgba(12,13,15,.92) 66%);padding:30px 10px 10px}
+  html[data-theme="endfield"] .card .name{font-family:inherit;font-weight:800;letter-spacing:.04em;font-size:14px}
+  html[data-theme="endfield"] .card .tag{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+  html[data-theme="endfield"] .empty-lib{border-radius:4px;border-style:solid;border-color:var(--line-strong);background:var(--panel-solid)}
+  html[data-theme="endfield"] .empty-lib .orb{border-radius:3px;animation:none;background:linear-gradient(135deg,var(--accent),#b8421f)}
+  html[data-theme="endfield"] .fab{
+    border-radius:4px;background:var(--accent);color:#fff;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+    box-shadow:4px 4px 0 rgba(29,31,35,.85), 0 0 0 1px rgba(29,31,35,.9) inset;
+  }
+  html[data-theme="endfield"] .fab:active{transform:translate(2px,2px);box-shadow:2px 2px 0 rgba(29,31,35,.85)}
+
+  /* 聊天：技术面板 */
+  html[data-theme="endfield"] .chat-hero{height:190px}
+  html[data-theme="endfield"] .chat-head{padding-left:12px}
+  html[data-theme="endfield"] .chat-head::before{content:"";position:absolute;left:0;top:calc(20px + env(safe-area-inset-top));width:3px;height:38px;background:var(--accent)}
+  html[data-theme="endfield"] .avatar-wrap::after{display:none}
+  html[data-theme="endfield"] .avatar{border-radius:4px;border:1px solid var(--line-strong);box-shadow:2px 2px 0 rgba(29,31,35,.2)}
+  html[data-theme="endfield"] .chat-head .who b{font-family:inherit;font-weight:800;letter-spacing:.06em}
+  html[data-theme="endfield"] .chat-head .who span{font-family:ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;font-size:10px}
+  html[data-theme="endfield"] .dot{border-radius:1px;background:var(--accent);box-shadow:none;animation:none}
+  html[data-theme="endfield"] .bubble{
+    border-radius:4px;border:1px solid var(--line-strong);background:var(--panel-solid);
+    box-shadow:3px 3px 0 rgba(29,31,35,.10);font-size:14.5px;
+  }
+  html[data-theme="endfield"] .row-msg.me .bubble{background:#24262b;color:#f3efe6;border-color:#24262b;box-shadow:3px 3px 0 rgba(29,31,35,.35)}
+  html[data-theme="endfield"] .row-msg .mini{border-radius:3px}
+  html[data-theme="endfield"] .sysline{border-radius:3px;font-family:ui-monospace,monospace;letter-spacing:.05em;background:var(--panel-solid);border-color:var(--line-strong)}
+  html[data-theme="endfield"] .chip{border-radius:3px;background:var(--panel-solid);border-color:var(--line-strong);font-family:ui-monospace,monospace;font-size:11.5px;letter-spacing:.04em}
+  html[data-theme="endfield"] #composer{background:var(--panel-solid);border-top:1px solid var(--line-strong)}
+  html[data-theme="endfield"] #input{border-radius:3px;border-color:var(--line-strong);background:#fff;font-size:14.5px}
+  html[data-theme="endfield"] #send{border-radius:3px;background:var(--accent);color:#fff;font-weight:800;letter-spacing:.1em;box-shadow:3px 3px 0 rgba(29,31,35,.8)}
+  html[data-theme="endfield"] #send:active{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(29,31,35,.8)}
+
+  /* 表单 / 弹层 */
+  html[data-theme="endfield"] .field input,html[data-theme="endfield"] .field textarea,html[data-theme="endfield"] .field select{
+    border-radius:3px;background:#fff;border-color:var(--line-strong);
+  }
+  html[data-theme="endfield"] .btn{border-radius:3px;border-color:var(--line-strong);background:var(--panel-solid);box-shadow:2px 2px 0 rgba(29,31,35,.14)}
+  html[data-theme="endfield"] .btn.primary{background:var(--accent);box-shadow:2px 2px 0 rgba(29,31,35,.6)}
+  html[data-theme="endfield"] .sec-title{font-family:ui-monospace,monospace;letter-spacing:.2em;color:var(--muted)}
+  html[data-theme="endfield"] .sec-title::before{content:"// ";color:var(--accent)}
+  html[data-theme="endfield"] .sheet{border-radius:6px 6px 0 0;border-top:2px solid var(--accent)}
+  html[data-theme="endfield"] .sheet h3{font-family:inherit;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+  html[data-theme="endfield"] .greet-item{border-radius:3px;background:#fff;border-color:var(--line-strong)}
+  html[data-theme="endfield"] .mem-box{border-radius:3px;background:#fff;border-color:var(--line-strong)}
+  html[data-theme="endfield"] .toast{border-radius:3px;border-color:var(--line-strong)}
 </style>
 </head>
 <body>
@@ -358,6 +462,7 @@
         <option value="midnight">午夜紫（暗）</option>
         <option value="sakura">樱花（亮）</option>
         <option value="noir">黑金（暗）</option>
+        <option value="endfield">终末地（浅 · 工业）</option>
       </select>
     </div>
 
@@ -439,7 +544,7 @@
 
   function applyTheme(t) {
     theme = t; document.documentElement.dataset.theme = t; save(LS.theme, t);
-    document.querySelector('meta[name=theme-color]').setAttribute('content', { midnight: '#070a12', sakura: '#fffafc', noir: '#070606' }[t] || '#070a12');
+    document.querySelector('meta[name=theme-color]').setAttribute('content', { midnight: '#070a12', sakura: '#fffafc', noir: '#070606', endfield: '#efebe2' }[t] || '#070a12');
     $('#cfgTheme').value = t;
     buildFx();
   }
@@ -458,6 +563,17 @@
     }
     fx.append(aurora);
 
+    if (theme === 'endfield') {
+      const grid = document.createElement('div'); grid.className = 'grid-layer'; fx.append(grid);
+      for (let i = 0; i < 6; i++) {
+        const t = document.createElement('i'); t.className = 'scan';
+        t.style.cssText = 'position:absolute;display:block;width:1px;background:linear-gradient(transparent,rgba(232,84,42,.55),transparent);'
+          + 'height:' + (50 + Math.random() * 90) + 'px;top:' + (Math.random() * 100) + '%;left:' + (Math.random() * 100) + '%;'
+          + 'animation:scanline ' + (6 + Math.random() * 6) + 's linear infinite;animation-delay:-' + (Math.random() * 8) + 's';
+        fx.append(t);
+      }
+      return;
+    }
     const kind = { midnight: 'bubble', sakura: 'petal', noir: 'spark' }[theme] || 'bubble';
     const n = kind === 'spark' ? 22 : kind === 'petal' ? 18 : 14;
     for (let i = 0; i < n; i++) {
@@ -863,7 +979,7 @@
     };
     inp.click();
   }
-  $('#btnTheme').onclick = () => { const o = ['midnight', 'sakura', 'noir']; applyTheme(o[(o.indexOf(theme) + 1) % o.length]); toast({ midnight: '午夜紫', sakura: '樱花', noir: '黑金' }[theme]); };
+  $('#btnTheme').onclick = () => { const o = ['midnight', 'sakura', 'noir', 'endfield']; applyTheme(o[(o.indexOf(theme) + 1) % o.length]); toast({ midnight: '午夜紫', sakura: '樱花', noir: '黑金', endfield: '终末地' }[theme]); };
   $('#btnSettings').onclick = () => { renderSettings(); show('s-set'); };
   $('#btnSetBack').onclick = () => show('s-lib');
   $('#btnBack').onclick = () => show('s-lib');
