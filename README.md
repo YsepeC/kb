@@ -1,5 +1,7 @@
 # Lumen 剧场
 
+> 内置世界：《帷幕之下》· 临江开放世界（现代异能沙盒，见 `worldbook/modern.md`）
+
 一个纯静态的角色扮演 AI 聊天页：导入角色卡，选个主题，直接开聊。托管在 GitHub Pages。
 
 - **角色卡**：支持 Tavern / SillyTavern / Chub 的 v2 JSON 卡片，也支持 PNG 卡片（读 PNG 里 `chara` 的 tEXt 块），可以导入、自建、导出。

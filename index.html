@@ -566,7 +566,7 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v15</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v16</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
   </div>
@@ -650,7 +650,7 @@
           <textarea id="cfgWorld" placeholder="例如：本世界为九州，修士分炼气筑基金丹元婴四境；语言偏古雅，称呼用“道友”。"></textarea>
         </div>
         <div class="btnrow" style="margin-top:8px">
-          <button class="btn" id="btnLoadWorld">载入《临江夜行·开放沙盒》</button>
+          <button class="btn" id="btnLoadWorld">载入《帷幕之下》</button>
           <button class="btn" id="btnImportWorld">导入文件</button>
           <button class="btn" id="btnExportWorld">导出</button>
           <input type="file" id="worldFile" accept=".md,.txt,text/markdown,text/plain" hidden>
@@ -1534,7 +1534,7 @@
       if (!r.ok) throw new Error('HTTP ' + r.status);
       const t = await r.text();
       $('#cfgWorld').value = t; cfg.world = t; save(LS.cfg, cfg);
-      toast('已载入开放沙盒世界书 · ' + t.length + ' 字');
+      toast('已载入《帷幕之下》· ' + t.length + ' 字');
     } catch (e) { toast('载入失败：' + (e.message || e)); }
   };
   $('#btnImportWorld').onclick = () => $('#worldFile').click();
