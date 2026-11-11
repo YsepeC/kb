@@ -137,6 +137,28 @@
     backdrop-filter:var(--blur);color:var(--text);font-size:16px;display:grid;place-items:center;cursor:pointer;transition:.15s;
   }
   .iconbtn:active{transform:scale(.94)}
+  .tabs{display:flex;gap:8px;padding:6px 18px 10px;position:relative;z-index:2}
+  .tab{
+    flex:1;border:1px solid var(--line);background:color-mix(in srgb,var(--panel) 70%,transparent);
+    color:var(--muted);border-radius:12px;padding:9px 0;font-size:13.5px;cursor:pointer;transition:.18s;
+    backdrop-filter:var(--blur);letter-spacing:.06em;
+  }
+  .tab.on{color:var(--text);border-color:var(--line-strong);background:var(--panel);box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .chat-list{display:flex;flex-direction:column;gap:10px}
+  .chat-item{
+    display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;cursor:pointer;
+    border:1px solid var(--line);background:var(--panel);backdrop-filter:var(--blur);
+    box-shadow:0 6px 18px rgba(0,0,0,.14);animation:rise .35s ease both;transition:.15s;
+  }
+  .chat-item:active{transform:scale(.985)}
+  .chat-item img{width:46px;height:46px;border-radius:14px;object-fit:cover;flex:0 0 auto;border:1px solid var(--line);background:var(--panel-solid)}
+  .chat-item .ph{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:0 0 auto;background:var(--panel-solid);border:1px solid var(--line);font-size:18px}
+  .chat-item .ci-main{flex:1;min-width:0}
+  .chat-item .ci-top{display:flex;align-items:baseline;gap:8px}
+  .chat-item .ci-top b{font-family:var(--serif);font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .chat-item .ci-top span{margin-left:auto;font-size:10.5px;color:var(--muted);flex:0 0 auto;font-family:ui-monospace,monospace}
+  .chat-item .ci-msg{font-size:12.5px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
+  .chat-item .ci-badge{font-size:10px;color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:1px 7px;margin-left:6px}
   .lib{flex:1;overflow-y:auto;padding:4px 18px calc(104px + env(safe-area-inset-bottom));position:relative;z-index:1;-webkit-overflow-scrolling:touch}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .card{
@@ -469,18 +491,32 @@
 <!-- ============ 角色库 ============ -->
 <section class="screen on" id="s-lib">
   <div class="topbar">
-    <div class="brand">Lumen <em>剧场</em><small>character playground · v8</small></div>
+    <div class="brand">Lumen <em>剧场</em><small>character playground · v9</small></div>
     <div class="spacer"></div>
     <button class="iconbtn" id="btnTheme" title="切换主题">◐</button>
     <button class="iconbtn" id="btnSettings" title="设置">⚙</button>
   </div>
+  <div class="tabs">
+    <button class="tab on" data-pane="chars">角色卡</button>
+    <button class="tab" data-pane="chats">历史对话</button>
+  </div>
   <div class="lib">
-    <div class="cards" id="cards"></div>
-    <div class="empty-lib" id="emptyLib">
-      <div class="orb"></div>
-      还没有角色。<br>
-      点右下角 <b>＋ 新角色</b> 现场捏一个，<br>或者导入 <b>JSON / PNG 角色卡</b>。<br>
-      <span style="opacity:.72">支持 Tavern · SillyTavern · Chub v2</span>
+    <div id="paneChars">
+      <div class="cards" id="cards"></div>
+      <div class="empty-lib" id="emptyLib">
+        <div class="orb"></div>
+        还没有角色。<br>
+        点右下角 <b>＋ 新角色</b> 现场捏一个，<br>或者导入 <b>JSON / PNG 角色卡</b>。<br>
+        <span style="opacity:.72">支持 Tavern · SillyTavern · Chub v2</span>
+      </div>
+    </div>
+    <div id="paneChats" style="display:none">
+      <div class="chat-list" id="chatList"></div>
+      <div class="empty-lib" id="emptyChats">
+        <div class="orb"></div>
+        还没有对话。<br>
+        去 <b>角色卡</b> 挑一个开聊吧。
+      </div>
     </div>
   </div>
   <button class="fab" id="btnAdd">＋ 新角色</button>
@@ -627,7 +663,7 @@
 
   let toastTimer = 0;
   function toast(m) { const el = $('#toast'); el.textContent = m; el.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('on'), 2100); }
-  function show(id) { $$('.screen').forEach(s => s.classList.toggle('on', s.id === id)); }
+  function show(id) { $$('.screen').forEach(s => s.classList.toggle('on', s.id === id)); if (id === 's-lib') renderChatList(); }
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const md = s => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/\*([^*\n]+)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
   const uid = () => 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
@@ -707,6 +743,69 @@
       b.style.opacity = kind === 'spark' ? '.0' : (0.14 + Math.random() * 0.34).toFixed(2);
       fx.append(b);
     }
+  }
+
+  /* ---------- 分页 ---------- */
+  function switchPane(name) {
+    $$('.tab').forEach(t => t.classList.toggle('on', t.dataset.pane === name));
+    $('#paneChars').style.display = name === 'chars' ? '' : 'none';
+    $('#paneChats').style.display = name === 'chats' ? '' : 'none';
+    if (name === 'chats') renderChatList();
+  }
+  $$('.tab').forEach(t => { t.onclick = () => switchPane(t.dataset.pane); });
+
+  function fmtTime(ts) {
+    if (!ts) return '';
+    const d = new Date(ts), now = new Date();
+    const same = d.toDateString() === now.toDateString();
+    const y = new Date(now.getTime() - 86400000).toDateString() === d.toDateString();
+    const hm = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    if (same) return hm;
+    if (y) return '昨天 ' + hm;
+    return (d.getMonth() + 1) + '/' + d.getDate();
+  }
+  const preview = t => String(t || '').replace(/[*`#]/g, '').replace(/\s+/g, ' ').trim().slice(0, 46);
+
+  function renderChatList() {
+    const box = $('#chatList'); if (!box) return;
+    const rows = chars
+      .map(c => {
+        const list = (chats[c.id] || []).filter(x => x.role !== 'error');
+        const last = list[list.length - 1];
+        return { c, list, last, ts: last ? last.ts : 0 };
+      })
+      .filter(r => r.list.length)
+      .sort((a, b) => b.ts - a.ts);
+    $('#emptyChats').style.display = rows.length ? 'none' : 'block';
+    box.innerHTML = '';
+    rows.forEach((r, i) => {
+      const el = document.createElement('div');
+      el.className = 'chat-item';
+      el.style.animationDelay = Math.min(i * 40, 240) + 'ms';
+      const av = r.c.avatar ? '<img alt="">' : '<div class="ph">✦</div>';
+      el.innerHTML = av +
+        '<div class="ci-main">' +
+          '<div class="ci-top"><b>' + esc(r.c.name) + '</b><span>' + fmtTime(r.ts) + '</span></div>' +
+          '<div class="ci-msg">' + esc(preview(r.last.content)) + '<span class="ci-badge">' + r.list.length + ' 条</span></div>' +
+        '</div>';
+      if (r.c.avatar) el.querySelector('img').src = r.c.avatar;
+      el.onclick = () => openChat(r.c.id);
+      let timer = 0;
+      el.addEventListener('touchstart', () => { timer = setTimeout(() => historyMenu(r.c.id), 520); }, { passive: true });
+      el.addEventListener('touchend', () => clearTimeout(timer));
+      el.addEventListener('touchmove', () => clearTimeout(timer));
+      el.oncontextmenu = e => { e.preventDefault(); historyMenu(r.c.id); };
+      box.append(el);
+    });
+  }
+
+  function historyMenu(id) {
+    const c = chars.find(x => x.id === id); if (!c) return;
+    openSheet('「' + c.name + '」的对话', [
+      { label: '继续聊', run: () => openChat(id) },
+      { label: '查看长期记忆', run: () => memorySheet(id) },
+      { label: '清空这段对话', danger: true, run: () => { if (confirm('清空和「' + c.name + '」的全部对话？前情记忆也会清空。')) { delete chats[id]; delete mem[id]; save(LS.chats, chats); save(LS.mem, mem); renderChatList(); toast('已清空'); } } }
+    ]);
   }
 
   /* ---------- 角色库 ---------- */
@@ -839,7 +938,7 @@
     if (!text || busy) return;
     input.value = ''; input.style.height = 'auto';
     currentChat().push({ role: 'user', content: text, ts: Date.now() });
-    save(LS.chats, chats); renderChat();
+    save(LS.chats, chats); renderChat(); renderChatList();
     await reply();
   }
 
@@ -873,7 +972,7 @@
       if (!acc) acc = '（没有收到内容）';
       row.remove();
       list.push({ role: 'assistant', content: acc, ts: Date.now() });
-      save(LS.chats, chats); renderChat();
+      save(LS.chats, chats); renderChat(); renderChatList();
       if (cfg.autoMem) maybeFold();
     } catch (e) {
       row.remove();
